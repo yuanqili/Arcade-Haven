@@ -1,7 +1,6 @@
-package edu.ucsb.g01.dialog;
+package edu.ucsb.g01.communication;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Message implements Serializable {
 

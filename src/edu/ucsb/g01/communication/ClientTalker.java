@@ -1,4 +1,4 @@
-package edu.ucsb.g01.dialog;
+package edu.ucsb.g01.communication;
 
 import edu.ucsb.g01.core.User;
 
@@ -10,12 +10,12 @@ import java.util.Date;
 
 /**
  * <p>ClientTalker is used send/recv messages to/from the server. Messages are
- * encapsulated in {@link edu.ucsb.g01.dialog.Message} class, which contains
+ * encapsulated in {@link edu.ucsb.g01.communication.Message} class, which contains
  * necessary information related to a message.</p>
  *
  * <p>To send a message, use {@link #send(int, String)} method. To receive a
  * message, use {@link #recv()} method. You can (indeed, you should) provide a
- * {@link edu.ucsb.g01.dialog.MessageReceiver} instance as a handler that is
+ * {@link edu.ucsb.g01.communication.MessageReceiver} instance as a handler that is
  * called upon a message arrival. For example, the following instance prints a
  * message to the console.</p>
  *
@@ -24,6 +24,9 @@ import java.util.Date;
  *     System.out.println("From: " + msg.srcUid);
  *     System.out.println("Message: " + msg.messageBody);
  * };}</pre>
+ *
+ * <p>You can run {@link #recv()} in another separated thread so that it
+ * receives a new message as soon as they are available. </p>
  */
 public class ClientTalker {
 

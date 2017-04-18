@@ -1,4 +1,4 @@
-package edu.ucsb.g01.communication;
+package edu.ucsb.g01.core;
 
 import java.io.Serializable;
 

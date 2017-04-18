@@ -1,4 +1,6 @@
-package edu.ucsb.g01.communication;
+package edu.ucsb.g01.core;
+
+import client.ClientTalker;
 
 /**
  * {@link MessageReceiver} is a handler instance that is called by

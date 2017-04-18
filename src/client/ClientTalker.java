@@ -1,5 +1,7 @@
-package edu.ucsb.g01.communication;
+package client;
 
+import edu.ucsb.g01.core.Message;
+import edu.ucsb.g01.core.MessageReceiver;
 import edu.ucsb.g01.core.User;
 
 import java.io.IOException;
@@ -10,12 +12,12 @@ import java.util.Date;
 
 /**
  * <p>ClientTalker is used send/recv messages to/from the server. Messages are
- * encapsulated in {@link edu.ucsb.g01.communication.Message} class, which contains
+ * encapsulated in {@link Message} class, which contains
  * necessary information related to a message.</p>
  *
  * <p>To send a message, use {@link #send(int, String)} method. To receive a
  * message, use {@link #recv()} method. You can (indeed, you should) provide a
- * {@link edu.ucsb.g01.communication.MessageReceiver} instance as a handler that is
+ * {@link MessageReceiver} instance as a handler that is
  * called upon a message arrival. For example, the following instance prints a
  * message to the console.</p>
  *

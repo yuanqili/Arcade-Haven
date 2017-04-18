@@ -18,4 +18,7 @@ public class User {
 
     /** User email, corresponds to {@code g01.user.email}.*/
     public String email;
+
+    /** User's last login IP, used for validation/security. */
+    public String lastLoginIp;
 }

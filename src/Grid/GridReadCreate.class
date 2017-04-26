@@ -36,12 +36,13 @@ public class GridReadCreate extends JPanel{
 	}
 	
 	// File name. Will implement method to change this because making it static is dumb.
+	// Edit this for your own purposes for now.
 	final static String FILE_NAME = "/Users/jeremybinkley/CS/Pacman/TestData.txt";
 	
 	// Not really sure what this is lol... Copied it from online.
 	final static Charset ENCODE = StandardCharsets.UTF_8;
 	
-	// Array that contains the numbers for each portion of the 15/15 grid. Probably will
+	// Array that contains the numbers for each portion of the 15x15 grid. Probably will
 	// adapt this to be larger/variable size in a later version.
 	int[][] arr = new int[15][15];
 	

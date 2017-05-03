@@ -12,12 +12,12 @@ public class GameEngine extends JPanel implements ActionListener
     private JFrame frame;
     int delay=100;
     boolean running = true;
-    int width =500; //sets the width of the canvas
-    int height = 500; // sets height of the canvas
+    int width =450; //sets the width of the canvas
+    int height = 470; // sets height of the canvas
 
     GridReadCreate grid = new GridReadCreate();
     pacman pac = new pacman(grid);
-    ghost gho = new ghost (grid);
+    ghost gho = new ghost (grid, 60,30);
 
     public static void main(String[] args)
     {

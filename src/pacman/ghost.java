@@ -14,7 +14,8 @@ public class ghost {
     int direction = 3;
     int x=60;
     int y=30;
-    int step =30;
+    int dx, dy;
+    int step =1;
     int width= 800;
     int height = 400;
     int[][] array = {};
@@ -24,10 +25,11 @@ public class ghost {
         System.out.print(s);
     }
 
-    public ghost(GridReadCreate grc)
+    public ghost(GridReadCreate grc, int x_cor, int y_cor)
     {
         loadImages();
         int xsize = grc.arr.length; int ysize = grc.arr[0].length;
+        x = x_cor; y = y_cor;
         array = new int [xsize][ysize];
 
         for (int i=0; i<xsize; i++){
@@ -58,23 +60,24 @@ public class ghost {
     {
         int [] checkArr = {0,0,0,0}; // should add range checker here
         int xx = x/30, yy = y/30;
+        //prt("x is : "+x+" y is: "+y+'\n');
         //prt("xx is : "+xx+" yy is: "+yy+'\n');
-        if (array[xx+1][yy]<=1) {checkArr[0]++;}//Right
+        if (array[(x+30)/30][yy]<=1 && y%30==0) {checkArr[0]++;}//Right
         //prt("Right: \n");
-        //prt("looking at num: "+array[xx+1][yy]+'\n');
-        //prt("looking at alter num: "+array[yy][xx+1]+'\n');
-        if (array[xx][yy+1]<=1) {checkArr[1]++;}//Down
+        //prt("looking at num: "+array[(x+15)/30][yy]+'\n');
+
+        if (array[xx][(y+30)/30]<=1 && x%30==0) {checkArr[1]++;}//Down
         //prt("Down: \n");
         //prt("looking at num: "+array[xx][yy+1]+'\n');
-        //prt("looking at alter num: "+array[yy+1][xx]+'\n');
-        if (array[xx-1][yy]<=1) {checkArr[2]++;}//Left
+
+        if (array[(x-1)/30][yy]<=1 && y%30==0) {checkArr[2]++;}//Left
         //prt("Left: \n");
-        //prt("looking at num: "+array[xx-1][yy]+'\n');
-        //prt("looking at alter num: "+array[yy][xx-1]+'\n');
-        if (array[xx][yy-1]<=1) {checkArr[3]++;}//Up
+        //prt("looking at num: "+array[xx][yy]+'\n');
+
+        if (array[xx][(y-1)/30]<=1 && x%30==0) {checkArr[3]++;}//Up
         //prt("Up: \n");
         //prt("looking at num: "+array[xx][yy-1]+'\n');
-        //prt("looking at alter num: "+array[yy-1][xx]+'\n');
+
 
         int check = 10;
         // check is the index of one of the 1's in checkArr

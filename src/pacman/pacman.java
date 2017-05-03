@@ -12,7 +12,7 @@ public class pacman {
     int direction;
     int x=30;
     int y=30;
-    int step =30;
+    int step =1;
     int width= 800;
     int height = 400;
     BufferedImage pacmanL;
@@ -71,23 +71,23 @@ public class pacman {
     {
         int [] checkArr = {0,0,0,0}; // should add range checker here
         int xx = x/30, yy = y/30;
+        prt("x is : "+x+" y is: "+y+'\n');
         //prt("xx is : "+xx+" yy is: "+yy+'\n');
-        if (array[xx+1][yy]<=1) {checkArr[0]++;}//Right
+        if (array[(x+30)/30][yy]<=1 && y%30==0) {checkArr[0]++;}//Right
         //prt("Right: \n");
-        //prt("looking at num: "+array[xx+1][yy]+'\n');
-        //prt("looking at alter num: "+array[yy][xx+1]+'\n');
-        if (array[xx][yy+1]<=1) {checkArr[1]++;}//Down
+        //prt("looking at num: "+array[(x+15)/30][yy]+'\n');
+
+        if (array[xx][(y+30)/30]<=1 && x%30==0) {checkArr[1]++;}//Down
         //prt("Down: \n");
         //prt("looking at num: "+array[xx][yy+1]+'\n');
-        //prt("looking at alter num: "+array[yy+1][xx]+'\n');
-        if (array[xx-1][yy]<=1) {checkArr[2]++;}//Left
+
+        if (array[(x-1)/30][yy]<=1 && y%30==0) {checkArr[2]++;}//Left
         //prt("Left: \n");
-        //prt("looking at num: "+array[xx-1][yy]+'\n');
-        //prt("looking at alter num: "+array[yy][xx-1]+'\n');
-        if (array[xx][yy-1]<=1) {checkArr[3]++;}//Up
+        //prt("looking at num: "+array[xx][yy]+'\n');
+
+        if (array[xx][(y-1)/30]<=1 && x%30==0) {checkArr[3]++;}//Up
         //prt("Up: \n");
         //prt("looking at num: "+array[xx][yy-1]+'\n');
-        //prt("looking at alter num: "+array[yy-1][xx]+'\n');
         //prt("checkarray is: {"+checkArr[0]+", "+checkArr[1]+", "+checkArr[2]+", "+checkArr[3]+"\n ");
         switch(direction)
         {

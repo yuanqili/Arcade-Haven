@@ -14,7 +14,7 @@ public class ghost {
     int direction = 3;
     int x=60;
     int y=30;
-    int step =1;
+    int step =30;
     int width= 800;
     int height = 400;
     int[][] array = {};
@@ -32,7 +32,7 @@ public class ghost {
 
         for (int i=0; i<xsize; i++){
             for (int j=0; j<ysize; j++){
-                array[i][j] = grc.arr[i][j];
+                array[j][i] = grc.arr[i][j];
             }
         }
     }
@@ -58,11 +58,23 @@ public class ghost {
     {
         int [] checkArr = {0,0,0,0}; // should add range checker here
         int xx = x/30, yy = y/30;
-        prt("xx is : "+xx+" yy is: "+yy+'\n');
+        //prt("xx is : "+xx+" yy is: "+yy+'\n');
         if (array[xx+1][yy]<=1) {checkArr[0]++;}//Right
-        if (array[xx][yy-1]<=1) {checkArr[1]++;}//Down
+        //prt("Right: \n");
+        //prt("looking at num: "+array[xx+1][yy]+'\n');
+        //prt("looking at alter num: "+array[yy][xx+1]+'\n');
+        if (array[xx][yy+1]<=1) {checkArr[1]++;}//Down
+        //prt("Down: \n");
+        //prt("looking at num: "+array[xx][yy+1]+'\n');
+        //prt("looking at alter num: "+array[yy+1][xx]+'\n');
         if (array[xx-1][yy]<=1) {checkArr[2]++;}//Left
-        if (array[xx][yy+1]<=1) {checkArr[3]++;}//Up
+        //prt("Left: \n");
+        //prt("looking at num: "+array[xx-1][yy]+'\n');
+        //prt("looking at alter num: "+array[yy][xx-1]+'\n');
+        if (array[xx][yy-1]<=1) {checkArr[3]++;}//Up
+        //prt("Up: \n");
+        //prt("looking at num: "+array[xx][yy-1]+'\n');
+        //prt("looking at alter num: "+array[yy-1][xx]+'\n');
 
         int check = 10;
         // check is the index of one of the 1's in checkArr
@@ -82,22 +94,25 @@ public class ghost {
                 x += step;
                 if(x > width)
                     x=width;
+                //prt("Right: x of "+(x-step)+" changed to "+x+"\n");
                 break;
             case 1:        //Down
                 y += step;
-                if(y < 0)
-                    y = 0;
+                if(y>height)
+                    y=height;
+                //prt("Down: y of "+(y-step)+" changed to "+y+"\n");
                 break;
             case 2:        //Left
                 x -= step;
                 if(x<0)
                     x=0;
+                //prt("Left: x of "+(x+step)+" changed to "+x+"\n");
                 break;
             case 3:        //Up
                 y -= step;
-                if(y>height)
-                    y=height;
-                prt("changed y to "+y+"\n");
+                if(y < 0)
+                    y = 0;
+                //prt("Up: y of "+(y+step)+" changed to "+y+"\n");
                 break;
         }
     }

@@ -12,7 +12,7 @@ public class pacman {
     int direction;
     int x=30;
     int y=30;
-    int step =1;
+    int step =30;
     int width= 800;
     int height = 400;
     BufferedImage pacmanL;
@@ -34,7 +34,7 @@ public class pacman {
 
         for (int i=0; i<xsize; i++){
             for (int j=0; j<ysize; j++){
-                array[i][j] = grc.arr[i][j];
+                array[j][i] = grc.arr[i][j];
             }
         }
     }
@@ -71,11 +71,24 @@ public class pacman {
     {
         int [] checkArr = {0,0,0,0}; // should add range checker here
         int xx = x/30, yy = y/30;
-        if (array[xx+1][yy]<=1) {checkArr[0]++;}
-        if (array[xx][yy-1]<=1) {checkArr[1]++;}
-        if (array[xx-1][yy]<=1) {checkArr[2]++;}
-        if (array[xx][yy+1]<=1) {checkArr[3]++;}
-
+        //prt("xx is : "+xx+" yy is: "+yy+'\n');
+        if (array[xx+1][yy]<=1) {checkArr[0]++;}//Right
+        //prt("Right: \n");
+        //prt("looking at num: "+array[xx+1][yy]+'\n');
+        //prt("looking at alter num: "+array[yy][xx+1]+'\n');
+        if (array[xx][yy+1]<=1) {checkArr[1]++;}//Down
+        //prt("Down: \n");
+        //prt("looking at num: "+array[xx][yy+1]+'\n');
+        //prt("looking at alter num: "+array[yy+1][xx]+'\n');
+        if (array[xx-1][yy]<=1) {checkArr[2]++;}//Left
+        //prt("Left: \n");
+        //prt("looking at num: "+array[xx-1][yy]+'\n');
+        //prt("looking at alter num: "+array[yy][xx-1]+'\n');
+        if (array[xx][yy-1]<=1) {checkArr[3]++;}//Up
+        //prt("Up: \n");
+        //prt("looking at num: "+array[xx][yy-1]+'\n');
+        //prt("looking at alter num: "+array[yy-1][xx]+'\n');
+        //prt("checkarray is: {"+checkArr[0]+", "+checkArr[1]+", "+checkArr[2]+", "+checkArr[3]+"\n ");
         switch(direction)
         {
             case KeyEvent.VK_RIGHT:
@@ -87,8 +100,8 @@ public class pacman {
             case KeyEvent.VK_DOWN:
                 if (checkArr[1]==1){
                 y += step;}
-                if(y < 0)
-                    y = 0;
+                if(y>height)
+                    y=height;
                 break;
             case KeyEvent.VK_LEFT:
                 if (checkArr[2]==1){
@@ -97,10 +110,10 @@ public class pacman {
                     x=0;
                 break;
             case KeyEvent.VK_UP:
-                if (checkArr[0]==1){
+                if (checkArr[3]==1){
                 y -= step;}
-                if(y>height)
-                    y=height;
+                if(y < 0)
+                    y = 0;
                 break;
         }
     }

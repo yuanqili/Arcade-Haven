@@ -9,7 +9,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class pacman {
-    int direction;
+    int direction, po_direction, ctn_direction;
+    boolean stuck = false;
     int x=30;
     int y=30;
     int step =1;
@@ -28,6 +29,8 @@ public class pacman {
     public pacman(GridReadCreate grc)
     {
         direction = KeyEvent.VK_RIGHT;
+        po_direction = KeyEvent.VK_RIGHT;
+        ctn_direction = KeyEvent.VK_RIGHT;
         loadImages();
         int xsize = grc.arr.length; int ysize = grc.arr[0].length;
         array = new int [xsize][ysize];
@@ -69,57 +72,94 @@ public class pacman {
 
     public void updateCharacter()
     {
-        int [] checkArr = {0,0,0,0}; // should add range checker here
-        int xx = x/30, yy = y/30;
-        prt("x is : "+x+" y is: "+y+'\n');
-        //prt("xx is : "+xx+" yy is: "+yy+'\n');
-        if (array[(x+30)/30][yy]<=1 && y%30==0) {checkArr[0]++;}//Right
-        //prt("Right: \n");
-        //prt("looking at num: "+array[(x+15)/30][yy]+'\n');
+        int[] checkArr = {0, 0, 0, 0}; // should add range checker here
+        int xx = x / 30, yy = y / 30;
+        if (array[(x + 30) / 30][yy] <= 1 && y % 30 == 0) {
+            checkArr[0]++;
+        }//Right
+        if (array[xx][(y + 30) / 30] <= 1 && x % 30 == 0) {
+            checkArr[1]++;
+        }//Down
+        if (array[(x - 1) / 30][yy] <= 1 && y % 30 == 0) {
+            checkArr[2]++;
+        }//Left
+        if (array[xx][(y - 1) / 30] <= 1 && x % 30 == 0) {
+            checkArr[3]++;
+        }//Up
 
-        if (array[xx][(y+30)/30]<=1 && x%30==0) {checkArr[1]++;}//Down
-        //prt("Down: \n");
-        //prt("looking at num: "+array[xx][yy+1]+'\n');
+        int temp_direction = direction;
+        if (x%30 == 0 && y%30 == 0 && !stuck){
+            temp_direction = po_direction;
+        }
+        else if ((x%30 != 0 || y%30 != 0) && !stuck){
+            po_direction = direction;
+            temp_direction = ctn_direction;
+        }
+        else if (x%30 == 0 && y%30 == 0 && stuck){
+            temp_direction = direction;
+        }
 
-        if (array[(x-1)/30][yy]<=1 && y%30==0) {checkArr[2]++;}//Left
-        //prt("Left: \n");
-        //prt("looking at num: "+array[xx][yy]+'\n');
-
-        if (array[xx][(y-1)/30]<=1 && x%30==0) {checkArr[3]++;}//Up
-        //prt("Up: \n");
-        //prt("looking at num: "+array[xx][yy-1]+'\n');
-        //prt("checkarray is: {"+checkArr[0]+", "+checkArr[1]+", "+checkArr[2]+", "+checkArr[3]+"\n ");
-        switch(direction)
-        {
+        switch (temp_direction) {
             case KeyEvent.VK_RIGHT:
-                if (checkArr[0]==1){
-                x += step;}
-                if(x > width)
-                    x=width;
+                if (checkArr[0] == 1) {
+                    x += step;
+                    ctn_direction = KeyEvent.VK_RIGHT;
+                    stuck = false;
+                }
+                else {
+                    stuck = true;
+                }
+                if (x > width)
+                    x = width;
                 break;
             case KeyEvent.VK_DOWN:
-                if (checkArr[1]==1){
-                y += step;}
-                if(y>height)
-                    y=height;
+                if (checkArr[1] == 1) {
+                    y += step;
+                    ctn_direction = KeyEvent.VK_DOWN;
+                    stuck = false;
+                }
+                else {
+                    stuck = true;
+                }
+                if (y > height)
+                    y = height;
                 break;
             case KeyEvent.VK_LEFT:
-                if (checkArr[2]==1){
-                x -= step;}
-                if(x<0)
-                    x=0;
+                if (checkArr[2] == 1) {
+                    x -= step;
+                    ctn_direction = KeyEvent.VK_LEFT;
+                    stuck = false;
+                }
+                else{
+                    stuck = true;
+                }
+                if (x < 0)
+                    x = 0;
                 break;
             case KeyEvent.VK_UP:
-                if (checkArr[3]==1){
-                y -= step;}
-                if(y < 0)
+                if (checkArr[3] == 1) {
+                    y -= step;
+                    ctn_direction = KeyEvent.VK_UP;
+                    stuck = false;
+                }
+                else{
+                    stuck = true;
+                }
+                if (y < 0)
                     y = 0;
                 break;
         }
     }
     public void drawPac(Graphics2D g)
     {
-        switch(direction)
+        int temp_dir;
+        if (x%30 == 0 && y%30 == 0){
+            temp_dir = direction;
+        }
+        else {
+            temp_dir = ctn_direction;
+        }
+        switch(temp_dir)
         {
             case KeyEvent.VK_RIGHT:
                 g.drawImage(pacmanR, x, y, null);
@@ -136,8 +176,4 @@ public class pacman {
         }
     }
 
-    public void getDirection(KeyEvent k)
-    {
-        direction = k.getKeyCode();
-    }
 }

@@ -10,7 +10,7 @@ import javax.swing.*;
 public class GameEngine extends JPanel implements ActionListener
 {
     private JFrame frame;
-    int delay=100;
+    int delay=20;
     boolean running = true;
     int width =450; //sets the width of the canvas
     int height = 470; // sets height of the canvas

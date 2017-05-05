@@ -16,11 +16,12 @@ public class pacman {
     int step =1;
     int width= 800;
     int height = 400;
-    BufferedImage pacmanL;
-    BufferedImage pacmanR;
-    BufferedImage pacmanD;
-    BufferedImage pacmanU;
+    private BufferedImage[] pacmanL = new BufferedImage[4];
+    private BufferedImage[] pacmanR = new BufferedImage[4];
+    private BufferedImage[] pacmanD = new BufferedImage[4];
+    private BufferedImage[] pacmanU = new BufferedImage[4];
     int[][] array;
+    int lives = 1; //number of lives you have
 
     void prt(String s){
         System.out.print(s);
@@ -51,27 +52,77 @@ public class pacman {
         }
         */
         try {
-            pacmanL = ImageIO.read(new File("src/pacman/images/left1.png"));
+            pacmanL[0] = ImageIO.read(new File("src/pacman/images/left1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanR = ImageIO.read(new File("src/pacman/images/right1.png"));
+            pacmanL[1] = ImageIO.read(new File("src/pacman/images/left2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }try {
-            pacmanD = ImageIO.read(new File("src/pacman/images/down1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }try {
-            pacmanU = ImageIO.read(new File("src/pacman/images/up1.png"));
+            pacmanL[2] = ImageIO.read(new File("src/pacman/images/left3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try {
+            pacmanR[0] = ImageIO.read(new File("src/pacman/images/right1.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pacmanR[1] = ImageIO.read(new File("src/pacman/images/right2.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pacmanR[2] = ImageIO.read(new File("src/pacman/images/right3.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pacmanD[0] = ImageIO.read(new File("src/pacman/images/down1.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pacmanD[1] = ImageIO.read(new File("src/pacman/images/down2.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pacmanD[2] = ImageIO.read(new File("src/pacman/images/down3.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pacmanU[0] = ImageIO.read(new File("src/pacman/images/up1.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pacmanU[1] = ImageIO.read(new File("src/pacman/images/up2.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pacmanU[2] = ImageIO.read(new File("src/pacman/images/up3.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pacmanL[3] = ImageIO.read(new File("src/pacman/images/pacman.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        pacmanR[3] = pacmanL[3];
+        pacmanD[3] = pacmanL[3];
+        pacmanU[3] = pacmanL[3];
     }
 
-    public void updateCharacter()
+    public void updateCharacter(int[] ghostPosX, int[] ghostPosY, int ghostNum)
     {
+        updateLives(ghostPosX, ghostPosY, ghostNum);
         int[] checkArr = {0, 0, 0, 0}; // should add range checker here
         int xx = x / 30, yy = y / 30;
         if (array[(x + 30) / 30][yy] <= 1 && y % 30 == 0) {
@@ -150,7 +201,7 @@ public class pacman {
                 break;
         }
     }
-    public void drawPac(Graphics2D g)
+    public void drawPac(Graphics2D g, int state)
     {
         int temp_dir;
         if (x%30 == 0 && y%30 == 0){
@@ -162,17 +213,42 @@ public class pacman {
         switch(temp_dir)
         {
             case KeyEvent.VK_RIGHT:
-                g.drawImage(pacmanR, x, y, null);
+                g.drawImage(pacmanR[state], x, y, null);
                 break;
             case KeyEvent.VK_DOWN:
-                g.drawImage(pacmanD, x, y, null);
+                g.drawImage(pacmanD[state], x, y, null);
                 break;
             case KeyEvent.VK_LEFT:
-                g.drawImage(pacmanL, x, y, null);
+                g.drawImage(pacmanL[state], x, y, null);
                 break;
             case KeyEvent.VK_UP:
-                g.drawImage(pacmanU, x, y, null);
+                g.drawImage(pacmanU[state], x, y, null);
                 break;
+        }
+    }
+
+    void updateLives(int[] ghostPosX, int[] ghostPosY, int ghostNum)
+    {
+        for(int i =0; i < ghostNum; i++)
+        {
+            if(x == ghostPosX[i] && y == ghostPosY[i])
+            {
+                lives--;
+            }
+
+        }
+    }
+
+    //checks if the playerLost
+    boolean lossCondition()
+    {
+        if(lives<=0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

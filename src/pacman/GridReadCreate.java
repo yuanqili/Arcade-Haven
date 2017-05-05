@@ -19,6 +19,30 @@ import java.util.List;
 
 public class GridReadCreate extends JPanel{
 
+
+	// File name. Will implement method to change this because making it static is dumb.
+	// Edit this for your own purposes for now.
+	final static String FILE_NAME = "src/Grid/TestData.txt";
+
+	// Not really sure what this is lol... Copied it from online.
+	final static Charset ENCODE = StandardCharsets.UTF_8;
+
+	// Array that contains the numbers for each portion of the 15x15 grid. Probably will
+	// adapt this to be larger/variable size in a later version.
+	static int[][] arr = new int[15][15];
+
+	//current score of the game
+	static int score = 0;
+
+	//how much each dot is worth
+	int pointWorth = 10;
+
+
+
+	//Number of dots in the grid (TODO: this should be in the data file, but will be set as a constant for now)
+	int totalDots = 107;
+
+
 	/*
 	 * Main method. Currently is being used to check if the object was reading in the
 	 * data correctly, but will can edited to test printing.
@@ -37,16 +61,7 @@ public class GridReadCreate extends JPanel{
 
 
 
-	// File name. Will implement method to change this because making it static is dumb.
-	// Edit this for your own purposes for now.
-	final static String FILE_NAME = "src/Grid/TestData.txt";
 
-	// Not really sure what this is lol... Copied it from online.
-	final static Charset ENCODE = StandardCharsets.UTF_8;
-
-	// Array that contains the numbers for each portion of the 15x15 grid. Probably will
-	// adapt this to be larger/variable size in a later version.
-	static int[][] arr = new int[15][15];
 
 	//  Reads the file. Variable name (a string) is the name of the input file.
 	List<String> readFile(String name) throws IOException {
@@ -87,7 +102,7 @@ public class GridReadCreate extends JPanel{
 	 * Images are 30x30 pixels, so using the array locations (i,j) multiplied by
 	 * 30 should work fine for the location of the images.
 	 */
-	void printToScreen(Graphics g) {
+	void printToScreen(Graphics g, Font font, Color fontColor) {
 		int iMax = arr.length;
 		int jMax = arr[0].length;
 		Graphics2D g2d = (Graphics2D) g;
@@ -98,6 +113,10 @@ public class GridReadCreate extends JPanel{
 				g2d.drawImage(getImage(arr[j][i]), i*30, j*30, this);
 			}
 		}
+		g.setFont(font);
+		g.setColor(fontColor);
+		String s = "Score: " + score;
+		g.drawString(s, 20, 20);
 	}
 
 	// not sure if the initialization is necessary... but it's here.
@@ -123,4 +142,30 @@ public class GridReadCreate extends JPanel{
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};*/
 	}
+
+	void update(int pacPosX, int pacPosY) //the input is the pacman position
+	{
+		int x = pacPosX/30; //switch from pixel position to array location
+		int y = pacPosY/30;
+		if(arr[y][x] == 1) {
+			arr[y][x] = 0;
+			score += pointWorth;
+			totalDots--;
+		}
+	}
+
+	//check if the player won
+	boolean winCondition()
+	{
+		if(totalDots==0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
 }

@@ -10,14 +10,27 @@ import javax.swing.*;
 public class GameEngine extends JPanel implements ActionListener
 {
     private JFrame frame;
-    int delay=20;
+    int delay=10; //controls the speed
     boolean running = true;
     int width =450; //sets the width of the canvas
-    int height = 470; // sets height of the canvas
+    int height = 490; // sets height of the canvas
+    int state;
+    int frameCount;
+    int animationRate = 5; //the speed in which the pacman character changes animation
+
+    //The font to be used
+    private static Font font = new Font("Times New Roman", Font.BOLD, 14);
+
+    //color used for the text
+    Color fontColor = new Color(255, 54, 42);
 
     GridReadCreate grid = new GridReadCreate();
     pacman pac = new pacman(grid);
-    ghost gho = new ghost (grid, 60,30);
+    ghost gho = new ghost (grid, 300,30);
+
+    int ghostNum = 1; //number of ghosts
+    int[] ghostsX = new int[1]; //x position of ghosts
+    int[] ghostsY = new int[1]; //y position of ghosts
 
     public static void main(String[] args)
     {
@@ -31,17 +44,7 @@ public class GameEngine extends JPanel implements ActionListener
         super.paintComponent(g);
         draw(g);
     }
-    /*public GameEngine()
-    {
-        setMinimumSize(new Dimension(width, height));
-        setMaximumSize(new Dimension(width, height));
-        setPreferredSize(new Dimension(width, height));
-        frame = new JFrame("Pac-Man");
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-        frame.add(this);
-        frame.pack();
-        frame.setVisible(true);
-    }*/
+
     void setUp()
     {
         frame = new JFrame();
@@ -59,22 +62,43 @@ public class GameEngine extends JPanel implements ActionListener
         //setUp();
         while(running) //checks if the game is stopped yet
         {
-            update();
+            while(!(grid.winCondition()) && !(pac.lossCondition()) && running)
+            {
+                update();
+                revalidate();
+                repaint();
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ghostsX[0] = gho.x;
+                ghostsY[0] = gho.y;
+            }
             revalidate();
             repaint();
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         setVisible(false); //will only reach here once the game stops running
     }
 
+    //displays the winning screen
+    private void winScreen(Graphics g)
+    {
+        g.drawString("YOU WON!", 190, 220);
+    }
+    private void lossScreen(Graphics g)
+    {
+        g.drawString("YOU LOST!", 190, 220);
+    }
+
+
     void update() //updates the frames
     {
-        pac.updateCharacter();
+        pac.updateCharacter(ghostsX, ghostsY, ghostNum);
         gho.updateCharacter();
+        grid.update(pac.x, pac.y);
+        frameCount++;
+        state = (frameCount/animationRate) % 4;
     }
 
     public void draw(Graphics g) //draws the frame
@@ -84,9 +108,17 @@ public class GameEngine extends JPanel implements ActionListener
 
         //g.setColor(Color.WHITE);
         g.fillRect(0, 0, width, height);
-        grid.printToScreen(g);
-        pac.drawPac(g2d);
+        grid.printToScreen(g, font, fontColor);
+        pac.drawPac(g2d, state);
         gho.drawGhost(g2d);
+        if(grid.winCondition())
+        {
+            winScreen(g);
+        }
+        if(pac.lossCondition())
+        {
+            lossScreen(g);
+        }
         //repaint();
     }
 

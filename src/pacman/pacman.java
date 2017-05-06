@@ -231,7 +231,7 @@ public class pacman {
     {
         for(int i =0; i < ghostNum; i++)
         {
-            if(x == ghostPosX[i] && y == ghostPosY[i])
+            if((x/15) == (ghostPosX[i]/15) && (y/15) == (ghostPosY[i]/15))
             {
                 lives--;
             }

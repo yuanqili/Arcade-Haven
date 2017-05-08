@@ -62,7 +62,23 @@ public class ghost {
         int xx = x/30, yy = y/30;
         //prt("x is : "+x+" y is: "+y+'\n');
         //prt("xx is : "+xx+" yy is: "+yy+'\n');
-        if (array[(x+30)/30][yy]<=1 && y%30==0) {checkArr[0]++;}//Right
+        boolean leftedge = (xx == 0);
+        boolean rightedge = (xx == 14);
+        switch(x) {
+            case -29:
+                x = 449;
+                leftedge = false;
+                rightedge = true;
+                break;
+            case 449:
+                x = -29;
+                leftedge = true;
+                rightedge = false;
+                break;
+        }
+        //handles right/left side wrapping
+
+        if (rightedge || array[(x+30)/30][yy]<=1 && y%30==0) {checkArr[0]++;}//Right
         //prt("Right: \n");
         //prt("looking at num: "+array[(x+15)/30][yy]+'\n');
 
@@ -70,7 +86,7 @@ public class ghost {
         //prt("Down: \n");
         //prt("looking at num: "+array[xx][yy+1]+'\n');
 
-        if (array[(x-1)/30][yy]<=1 && y%30==0) {checkArr[2]++;}//Left
+        if (leftedge || array[(x-1)/30][yy]<=1 && y%30==0) {checkArr[2]++;}//Left
         //prt("Left: \n");
         //prt("looking at num: "+array[xx][yy]+'\n');
 
@@ -95,8 +111,6 @@ public class ghost {
         {
             case 0:        //Right
                 x += step;
-                if(x > width)
-                    x=width;
                 //prt("Right: x of "+(x-step)+" changed to "+x+"\n");
                 break;
             case 1:        //Down
@@ -107,8 +121,6 @@ public class ghost {
                 break;
             case 2:        //Left
                 x -= step;
-                if(x<0)
-                    x=0;
                 //prt("Left: x of "+(x+step)+" changed to "+x+"\n");
                 break;
             case 3:        //Up

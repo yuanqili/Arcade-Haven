@@ -125,18 +125,33 @@ public class pacman {
         updateLives(ghostPosX, ghostPosY, ghostNum);
         int[] checkArr = {0, 0, 0, 0}; // should add range checker here
         int xx = x / 30, yy = y / 30;
-        if (array[(x + 30) / 30][yy] <= 1 && y % 30 == 0) {
+        boolean leftedge = (xx == 0);
+        boolean rightedge = (xx == 14);
+        switch(x) {
+            case -29:
+                x = 449;
+                leftedge = false;
+                rightedge = true;
+                break;
+            case 449:
+                x = -29;
+                leftedge = true;
+                rightedge = false;
+                break;
+        }
+        if (rightedge || array[(x + 30) / 30][yy] <= 1 && y % 30 == 0) {
             checkArr[0]++;
         }//Right
         if (array[xx][(y + 30) / 30] <= 1 && x % 30 == 0) {
             checkArr[1]++;
         }//Down
-        if (array[(x - 1) / 30][yy] <= 1 && y % 30 == 0) {
+        if (leftedge || array[(x - 1) / 30][yy] <= 1 && y % 30 == 0) {
             checkArr[2]++;
         }//Left
         if (array[xx][(y - 1) / 30] <= 1 && x % 30 == 0) {
             checkArr[3]++;
-        }//Up
+        }
+
 
         int temp_direction = direction;
         if (x%30 == 0 && y%30 == 0 && !stuck){
@@ -160,8 +175,6 @@ public class pacman {
                 else {
                     stuck = true;
                 }
-                if (x > width)
-                    x = width;
                 break;
             case KeyEvent.VK_DOWN:
                 if (checkArr[1] == 1) {
@@ -184,8 +197,6 @@ public class pacman {
                 else{
                     stuck = true;
                 }
-                if (x < 0)
-                    x = 0;
                 break;
             case KeyEvent.VK_UP:
                 if (checkArr[3] == 1) {

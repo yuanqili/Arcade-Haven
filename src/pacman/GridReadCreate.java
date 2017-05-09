@@ -40,7 +40,7 @@ public class GridReadCreate extends JPanel{
 
 
 	//Number of dots in the grid (TODO: this should be in the data file, but will be set as a constant for now)
-	int totalDots = 107;
+	int totalDots = 111;
 
 
 	/*

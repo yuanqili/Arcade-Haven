@@ -150,20 +150,20 @@ public class SBServer {
                         if (db.userIdentityValidation(loginInfo[0], loginInfo[1]) == 0) {
                             name = loginInfo[0];
                             clientWriters.put(name, out);
-                            out.writeObject(serverInfo("succeed", true));
+                            out.writeObject(serverInfo("succeed", true, msg.getSequence()));
                             logger.info("user <" + loginInfo[0] + "> log in");
                         } else {
-                            out.writeObject(serverInfo("fail", false));
+                            out.writeObject(serverInfo("fail", false, msg.getSequence()));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        out.writeObject(serverInfo("wrong format", false));
+                        out.writeObject(serverInfo("wrong format", false, msg.getSequence()));
                     }
 
                 } else if (action == Action.bye) {
 
                     clientWriters.remove(name);
-                    out.writeObject(serverInfo("bye", true));
+                    out.writeObject(serverInfo("bye", true, msg.getSequence()));
                     try {
                         socket.close();
                     } catch (IOException e) {
@@ -174,9 +174,9 @@ public class SBServer {
 
                     String[] signupInfo = msg.getBody().split(" ");
                     if (db.userRegistration(signupInfo[0], signupInfo[1])) {
-                        out.writeObject(serverInfo("succeed", true));
+                        out.writeObject(serverInfo("succeed", true, msg.getSequence()));
                     } else {
-                        out.writeObject(serverInfo("fail", false));
+                        out.writeObject(serverInfo("fail", false, msg.getSequence()));
                     }
 
                 } else if (action == Action.userlist) {
@@ -184,15 +184,15 @@ public class SBServer {
                     StringBuilder sb = new StringBuilder();
                     clientWriters.forEach((username, out) -> sb.append(username).append(" "));
                     logger.info("userlist: " + sb.toString());
-                    out.writeObject(serverInfo(sb.toString(), true));
+                    out.writeObject(serverInfo(sb.toString(), true, msg.getSequence()));
 
                 } else {
-                    out.writeObject(serverInfo("cannot understand message", false));
+                    out.writeObject(serverInfo("cannot understand message", false, msg.getSequence()));
                 }
             } else if (type == Type.info) {
-                out.writeObject(serverInfo("received", true));
+                out.writeObject(serverInfo("received", true, msg.getSequence()));
             } else {
-                out.writeObject(serverInfo("cannot understand message", false));
+                out.writeObject(serverInfo("cannot understand message", false, msg.getSequence()));
             }
         }
 
@@ -214,6 +214,10 @@ public class SBServer {
          */
         private SBMessage serverInfo(String body, boolean flag) {
             return new SBMessage().setType(Type.info).setBody(body).setFlag(flag);
+        }
+
+        private SBMessage serverInfo(String body, boolean flag, int sequence) {
+            return new SBMessage().setType(Type.info).setBody(body).setFlag(flag).setSequence(sequence);
         }
 
         /**

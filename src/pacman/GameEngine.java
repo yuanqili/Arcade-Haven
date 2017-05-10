@@ -26,11 +26,14 @@ public class GameEngine extends JPanel implements ActionListener
 
     GridReadCreate grid = new GridReadCreate();
     pacman pac = new pacman(grid);
-    ghost gho = new ghost (grid, 300,30);
+    ghost gho = new ghost(grid, 300,30, "src/pacman/images/ghost_r.png");
+    ghost gho2 = new ghost(grid, 30, 210, "src/pacman/images/ghost_o.png");
+    ghost gho3 = new ghost(grid, 120, 390, "src/pacman/images/ghost_p.png");
+    ghost gho4 = new ghost(grid, 360, 240, "src/pacman/images/ghost_b.png");
 
-    int ghostNum = 1; //number of ghosts
-    int[] ghostsX = new int[1]; //x position of ghosts
-    int[] ghostsY = new int[1]; //y position of ghosts
+    int ghostNum = 4; //number of ghosts
+    int[] ghostsX = new int[4]; //x position of ghosts
+    int[] ghostsY = new int[4]; //y position of ghosts
 
     public static void main(String[] args)
     {
@@ -74,6 +77,12 @@ public class GameEngine extends JPanel implements ActionListener
                 }
                 ghostsX[0] = gho.x;
                 ghostsY[0] = gho.y;
+                ghostsX[1] = gho2.x;
+                ghostsY[1] = gho2.y;
+                ghostsX[2] = gho3.x;
+                ghostsY[2] = gho3.y;
+                ghostsX[3] = gho4.x;
+                ghostsY[3] = gho4.y;
             }
             revalidate();
             repaint();
@@ -96,6 +105,9 @@ public class GameEngine extends JPanel implements ActionListener
     {
         pac.updateCharacter(ghostsX, ghostsY, ghostNum);
         gho.updateCharacter();
+        gho2.updateCharacter();
+        gho3.updateCharacter();
+        gho4.updateCharacter();
         grid.update(pac.x, pac.y);
         frameCount++;
         state = (frameCount/animationRate) % 4;
@@ -111,6 +123,9 @@ public class GameEngine extends JPanel implements ActionListener
         grid.printToScreen(g, font, fontColor);
         pac.drawPac(g2d, state);
         gho.drawGhost(g2d);
+        gho2.drawGhost(g2d);
+        gho3.drawGhost(g2d);
+        gho4.drawGhost(g2d);
         if(grid.winCondition())
         {
             winScreen(g);

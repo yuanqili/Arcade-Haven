@@ -21,7 +21,7 @@ public class pacman {
     private BufferedImage[] pacmanD = new BufferedImage[4];
     private BufferedImage[] pacmanU = new BufferedImage[4];
     int[][] array;
-    int lives = 1; //number of lives you have
+    int lives = 3; //number of lives you have
 
     void prt(String s){
         System.out.print(s);

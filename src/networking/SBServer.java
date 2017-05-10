@@ -148,6 +148,7 @@ public class SBServer {
                     try {
                         String[] loginInfo = msg.getBody().split(" ");
                         if (db.userIdentityValidation(loginInfo[0], loginInfo[1]) == 0) {
+                            name = loginInfo[0];
                             clientWriters.put(name, out);
                             out.writeObject(serverInfo("succeed", true));
                             logger.info("user <" + loginInfo[0] + "> log in");
@@ -155,6 +156,7 @@ public class SBServer {
                             out.writeObject(serverInfo("fail", false));
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
                         out.writeObject(serverInfo("wrong format", false));
                     }
 
@@ -181,6 +183,7 @@ public class SBServer {
 
                     StringBuilder sb = new StringBuilder();
                     clientWriters.forEach((username, out) -> sb.append(username).append(" "));
+                    logger.info("userlist: " + sb.toString());
                     out.writeObject(serverInfo(sb.toString(), true));
 
                 } else {

@@ -12,9 +12,6 @@ import java.util.List;
 
 /**
  * @author jbinx
- *
- * Sorry this is ridiculously unorganized at the moment. I'll fix it within the next
- * few days.
  */
 
 public class GridReadCreate extends JPanel{

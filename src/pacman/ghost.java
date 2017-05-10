@@ -20,13 +20,15 @@ public class ghost {
     int height = 400;
     int[][] array = {};
     BufferedImage ghostImage;
+    String file_name;
 
     void prt(String s){
         System.out.print(s);
     }
 
-    public ghost(GridReadCreate grc, int x_cor, int y_cor)
+    public ghost(GridReadCreate grc, int x_cor, int y_cor, String file)
     {
+        file_name = file;
         loadImages();
         int xsize = grc.arr.length; int ysize = grc.arr[0].length;
         x = x_cor; y = y_cor;
@@ -40,7 +42,7 @@ public class ghost {
     }
     public void loadImages() {
         try {
-            ghostImage = ImageIO.read(new File("src/pacman/images/ghost.png"));
+            ghostImage = ImageIO.read(new File(file_name));
         } catch (IOException e) {
             e.printStackTrace();
         }

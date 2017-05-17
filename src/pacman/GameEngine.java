@@ -17,6 +17,10 @@ public class GameEngine extends JPanel implements ActionListener
     int state;
     int frameCount;
     int animationRate = 5; //the speed in which the pacman character changes animation
+    boolean pause = false; //a variable used to check if the game is paused
+    boolean start = false; //a variable denoting whether or not the game began
+    boolean alive = false; //checks if pacman is alive
+    int lives = 3;
 
     //The font to be used
     private static Font font = new Font("Times New Roman", Font.BOLD, 14);
@@ -25,11 +29,11 @@ public class GameEngine extends JPanel implements ActionListener
     Color fontColor = new Color(255, 54, 42);
 
     GridReadCreate grid = new GridReadCreate();
-    pacman pac = new pacman(grid);
-    ghost gho = new ghost(grid, 300,30, "src/pacman/images/ghost_r.png");
-    ghost gho2 = new ghost(grid, 30, 210, "src/pacman/images/ghost_o.png");
-    ghost gho3 = new ghost(grid, 120, 390, "src/pacman/images/ghost_p.png");
-    ghost gho4 = new ghost(grid, 360, 240, "src/pacman/images/ghost_b.png");
+    pacman pac;
+    ghost gho;
+    ghost gho2;
+    ghost gho3;
+    ghost gho4;
 
     int ghostNum = 4; //number of ghosts
     int[] ghostsX = new int[4]; //x position of ghosts
@@ -50,6 +54,12 @@ public class GameEngine extends JPanel implements ActionListener
 
     void setUp()
     {
+        frameSetUp();
+        characterSetUp();
+    }
+
+    void frameSetUp()
+    {
         frame = new JFrame();
         frame.setTitle("Pac-Man");
         frame.setSize(width, height);
@@ -60,12 +70,23 @@ public class GameEngine extends JPanel implements ActionListener
         frame.setFocusable(true);
     }
 
+    void characterSetUp()
+    {
+        alive = true;
+        start = false;
+        pac = new pacman(grid, lives);
+        gho = new ghost(grid, 300,30, "src/pacman/images/ghost_r.png");
+        gho2 = new ghost(grid, 30, 210, "src/pacman/images/ghost_o.png");
+        gho3 = new ghost(grid, 120, 390, "src/pacman/images/ghost_p.png");
+        gho4 = new ghost(grid, 360, 240, "src/pacman/images/ghost_b.png");
+    }
+
     void run() //starts the game
     {
         //setUp();
         while(running) //checks if the game is stopped yet
         {
-            while(!(grid.winCondition()) && !(pac.lossCondition()) && running)
+            while(!(grid.winCondition())  && !(pac.lossCondition()) && !pause && start && running && alive)
             {
                 update();
                 revalidate();
@@ -84,11 +105,18 @@ public class GameEngine extends JPanel implements ActionListener
                 ghostsX[3] = gho4.x;
                 ghostsY[3] = gho4.y;
             }
+            if(!alive && lives > 1)
+            {
+                lives--;
+                characterSetUp();
+            }
             revalidate();
             repaint();
         }
         setVisible(false); //will only reach here once the game stops running
     }
+
+
 
     //displays the winning screen
     private void winScreen(Graphics g)
@@ -99,11 +127,15 @@ public class GameEngine extends JPanel implements ActionListener
     {
         g.drawString("YOU LOST!", 190, 220);
     }
+    private void pauseScreen(Graphics g) {  g.drawString("PAUSE", 190, 220); }
+    private void startScreen(Graphics g) {  g.drawString("PRESS SPACE TO START", 150, 220);    }
+
+
 
 
     void update() //updates the frames
     {
-        pac.updateCharacter(ghostsX, ghostsY, ghostNum);
+        alive = pac.updateCharacter(ghostsX, ghostsY, ghostNum);
         gho.updateCharacter();
         gho2.updateCharacter();
         gho3.updateCharacter();
@@ -115,10 +147,7 @@ public class GameEngine extends JPanel implements ActionListener
 
     public void draw(Graphics g) //draws the frame
     {
-        //Graphics g = getGraphics();
         Graphics2D g2d = (Graphics2D) g;
-
-        //g.setColor(Color.WHITE);
         g.fillRect(0, 0, width, height);
         grid.printToScreen(g, font, fontColor);
         pac.drawPac(g2d, state);
@@ -126,6 +155,8 @@ public class GameEngine extends JPanel implements ActionListener
         gho2.drawGhost(g2d);
         gho3.drawGhost(g2d);
         gho4.drawGhost(g2d);
+        String l = "Lives: " + lives;
+        g.drawString(l, 360, 20);
         if(grid.winCondition())
         {
             winScreen(g);
@@ -134,7 +165,14 @@ public class GameEngine extends JPanel implements ActionListener
         {
             lossScreen(g);
         }
-        //repaint();
+        if(pause)
+        {
+            pauseScreen(g);
+        }
+        if(!start)
+        {
+            startScreen(g);
+        }
     }
 
     class TAdapter extends KeyAdapter {
@@ -146,15 +184,23 @@ public class GameEngine extends JPanel implements ActionListener
 
             if (running) {
                 if (key == KeyEvent.VK_LEFT) {
+                    pause = false;
                     pac.direction = key;
                 } else if (key == KeyEvent.VK_RIGHT) {
+                    pause = false;
                     pac.direction = key;
                 } else if (key == KeyEvent.VK_UP) {
+                    pause = false;
                     pac.direction = key;
                 } else if (key == KeyEvent.VK_DOWN) {
+                    pause = false;
                     pac.direction = key;
                 } else if (key == KeyEvent.VK_ESCAPE) {
                     running = false;
+                } else if (key == KeyEvent.VK_P) {
+                    pause = true;
+                } else if (key == KeyEvent.VK_SPACE) {
+                    start = true;
                 }
             } else {
                 if (key == 's' || key == 'S') {

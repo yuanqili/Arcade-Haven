@@ -27,7 +27,7 @@ public class pacman {
         System.out.print(s);
     }
 
-    public pacman(GridReadCreate grc)
+    public pacman(GridReadCreate grc, int numLives)
     {
         direction = KeyEvent.VK_RIGHT;
         po_direction = KeyEvent.VK_RIGHT;
@@ -41,6 +41,7 @@ public class pacman {
                 array[j][i] = grc.arr[i][j];
             }
         }
+        lives = numLives;
     }
     public void loadImages() {
         /*File here = new File(".");
@@ -120,9 +121,8 @@ public class pacman {
         pacmanU[3] = pacmanL[3];
     }
 
-    public void updateCharacter(int[] ghostPosX, int[] ghostPosY, int ghostNum)
+    public boolean updateCharacter(int[] ghostPosX, int[] ghostPosY, int ghostNum)
     {
-        updateLives(ghostPosX, ghostPosY, ghostNum);
         int[] checkArr = {0, 0, 0, 0}; // should add range checker here
         int xx = x / 30, yy = y / 30;
         boolean leftedge = (xx == 0);
@@ -211,6 +211,8 @@ public class pacman {
                     y = 0;
                 break;
         }
+        return updateLives(ghostPosX, ghostPosY, ghostNum);
+
     }
     public void drawPac(Graphics2D g, int state)
     {
@@ -238,16 +240,20 @@ public class pacman {
         }
     }
 
-    void updateLives(int[] ghostPosX, int[] ghostPosY, int ghostNum)
+
+
+    boolean updateLives(int[] ghostsX, int[] ghostsY, int ghostNum)
     {
         for(int i =0; i < ghostNum; i++)
         {
-            if((x/15) == (ghostPosX[i]/15) && (y/15) == (ghostPosY[i]/15))
+            if((x/15) == (ghostsX[i]/15) && (y/15) == (ghostsY[i]/15))
             {
                 lives--;
+                return false;
             }
 
         }
+        return true;
     }
 
     //checks if the playerLost

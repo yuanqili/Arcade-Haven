@@ -16,6 +16,8 @@ public class Login implements ActionListener {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
+    private JButton signupButton;
+    private JLabel infoLabel;
 
     public String username;
     public String password;
@@ -28,18 +30,6 @@ public class Login implements ActionListener {
     public Login(String host, int port) {
         this.host = host;
         this.port = port;
-        frame.add(main);
-        frame.setSize(640, 480);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        loginButton.addActionListener(this);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        username = usernameField.getText();
-        password = new String(passwordField.getPassword());
 
         try {
             client = new SBClient(this.host, this.port);
@@ -48,6 +38,45 @@ public class Login implements ActionListener {
         } catch (ClassNotFoundException e1) {
             e1.printStackTrace();
         }
+
+        frame.add(main);
+        frame.setSize(640, 480);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+        loginButton.addActionListener(this);
+
+        signupButton.addActionListener(e -> {
+            username = usernameField.getText();
+            password = new String(passwordField.getPassword());
+
+            SBMessage signupInfo, signupResponse;
+            boolean signupStatus = false;
+
+            try {
+                signupInfo = client.signup(username, password);
+                do {
+                    signupResponse = (SBMessage) client.getIn().readObject();
+                    signupStatus = signupResponse.getFlag();
+                } while (signupResponse.getSequence() != signupResponse.getSequence());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            } catch (ClassNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
+            if (signupStatus)
+                infoLabel.setText("Signup succeeds");
+            else
+                infoLabel.setText("Signup fails");
+        });
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        username = usernameField.getText();
+        password = new String(passwordField.getPassword());
 
         SBMessage loginInfo, loginResponse;
         boolean loginStatus = false;

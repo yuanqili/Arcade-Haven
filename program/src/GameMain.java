@@ -3,8 +3,8 @@ import gui.Login;
 public class GameMain {
     public static void main(String[] args) {
 
-        String host = null;
-        int port = 0;
+        String host = "localhost";
+        int port = 23333;
 
         try {
             host = args[0];

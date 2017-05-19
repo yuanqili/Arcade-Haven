@@ -245,7 +245,7 @@ public class SBServer {
                         logger.info(name + " logged off");
                         return;
                     }
-                    logger.info("Received: " + message);
+
                     try {
                         response(message);
                     } catch (Exception e) {
@@ -254,7 +254,7 @@ public class SBServer {
                 }
 
             } catch (IOException e) {
-                logger.warning(e.getMessage());
+                logger.info("user <" + name + "> log out");
             } catch (ClassNotFoundException e) {
                 logger.warning("Class SBMessage not found");
             } finally {

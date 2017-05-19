@@ -8,6 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The class of pacman, which creates the object of pacman, updates the object of pacman and draws the object of pacman
+ */
 public class Pacman {
     /**
      * Direction is key input of moving direction.
@@ -70,7 +73,7 @@ public class Pacman {
     private BufferedImage[] pacmanU = new BufferedImage[4];
 
     /**
-     *  Constructor for pacman class, initiate pacman object
+     * Constructor for pacman class, initiate pacman object
      * @param grc GridReadCreate Object
      * @param numLives Number of lives remaining
      * @param L Left facing pacman image
@@ -196,7 +199,7 @@ public class Pacman {
     }
 
     /**
-     *  Draws the pacman onto the graphic board.
+     * Draws the pacman onto the graphic board.
      * @param g Graphic2D object g
      * @param state pacman facing information
      */
@@ -237,7 +240,10 @@ public class Pacman {
         return true;
     }
 
-    //checks if the playerLost
+    /**
+     * Check if the game is lost
+     * @return True if game is lost
+     */
     boolean lossCondition() {
         return lives <= 0;
     }

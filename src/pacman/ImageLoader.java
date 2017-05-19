@@ -6,21 +6,47 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by zhanchengqian on 2017/5/18.
+ * The class of ImageLoader deals with reading images that represent the graphics of pacman and ghosts
  */
 public class ImageLoader {
 
+    /**
+     * Left facing pacman image.
+     */
     public BufferedImage[] pacmanL = new BufferedImage[4];
+
+    /**
+     * Right facing pacman image.
+     */
     public BufferedImage[] pacmanR = new BufferedImage[4];
+
+    /**
+     * Down facing pacman image.
+     */
     public BufferedImage[] pacmanD = new BufferedImage[4];
+
+    /**
+     * Up facing pacman image.
+     */
     public BufferedImage[] pacmanU = new BufferedImage[4];
+
+    /**
+     * Images of different-color ghosts
+     */
     public BufferedImage[] ghostImages = new BufferedImage[4];
 
+    /**
+     *  Loads the images of pacman and ghosts.
+     * @param fileNames FileNames stores file names of different ghost images
+     */
     public ImageLoader(String [] fileNames){
         pacmanLoadImages();
         ghostLoadImages(fileNames);
     }
 
+    /**
+     * Loads the image of the pacman
+     */
     public void pacmanLoadImages() {
         /*File here = new File(".");
         try {
@@ -99,6 +125,9 @@ public class ImageLoader {
         pacmanU[3] = pacmanL[3];
     }
 
+    /**
+     * Loads the images of the ghosts
+     */
     public void ghostLoadImages(String [] fileNames) {
         try {
             for (int i=0; i<fileNames.length; i++) {

@@ -5,7 +5,7 @@
 ## Server
 
 The server runs correctly on CSIL machine. Other platform is not guaranteed.
-Copy the code onto a CSIL machine, and runs the server like this
+Copy the code onto a CSIL machine, and runs the server like this **(Note the working directory.)**
 
 ```sh
 g01-draft/program/out/ $ java -cp ../lib/mysql-connector-java-5.1.41-bin.jar:. ServerMain
@@ -20,10 +20,10 @@ an port given as the argument.
 
 To start the game, runs it like this, where the first argument is host name, the
 second argument is port number. If you run it on you local machine, the host
-name is "localhost".
+name is "localhost". **(Note the working directory.)**
 
 ```sh
-g01-draft/program/out/ $ java -jar out/Arcade-Haven.jar "csil-08.cs.ucsb.edu" 23333
+g01-draft/program/ $ java -jar out/Arcade-Haven.jar "csil-08.cs.ucsb.edu" 23333
 ```
 
 - username: timcook

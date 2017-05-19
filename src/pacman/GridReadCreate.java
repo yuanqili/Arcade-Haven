@@ -12,70 +12,42 @@ import java.util.List;
 
 public class GridReadCreate extends JPanel {
 
-    // File name. Will implement method to change this because making it static is dumb.
-    // Edit this for your own purposes for now.
+    /** Name of the file where grid data is stored*/
     final static String FILE_NAME = "res/grid/TestData.txt";
 
-    // Not really sure what this is lol... Copied it from online.
+    /** Charset specification for file reading*/
     final static Charset ENCODE = StandardCharsets.UTF_8;
 
-    // Array that contains the numbers for each portion of the 15x15 grid. Probably will
-    // adapt this to be larger/variable size in a later version.
+
+    /** Array that contains the numbers for each portion of the 15x15 grid*/
     static int[][] arr = new int[15][15];
 
-    // current score of the game
+    /** Current score of the game*/
     static int score = 0;
 
-    // how much each dot is worth
+    /** How many points each dot is worth*/
     int pointWorth = 10;
 
 
-    // Number of dots in the grid
-    // TODO: this should be in the data file, but will be set as a constant for now
+    /** Number of dots in the grid */
     int totalDots = 111;
 
 
-    // not sure if the initialization is necessary... but it's here.
+    /** Default constructor for GridReadCreate objects. Reads and tranlates a file into the array.*/
     GridReadCreate() {
         try {
             translateTo2DArray(readFile(FILE_NAME));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*int[][] arr = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};*/
     }
 
     /*
-     * Main method. Currently is being used to check if the object was reading in the
-     * data correctly, but will can edited to test printing.
-     */
-    public static void drawGrid(Graphics g) throws IOException {
-        GridReadCreate reader = new GridReadCreate();
-        List<String> strList = reader.readFile(FILE_NAME);
-        reader.translateTo2DArray(strList);
-        for (int j = 0; j < arr.length; j++) {
-            for (int i = 0; i < arr[0].length; i++)
-                System.out.print(arr[j][i] + " ");
-            System.out.println();
-        }
-    }
-
-    /*
-     * Returns the correct image given an int (typically from the 2D int array).
+     * Returns the correct image given an int (typically from the 2D integer array arr[][]).
+     *
+     * @param input  the integer reference for the desired file
+     *
+     * @return  the image corresponding to the supplied integer
      */
     static Image getImage(int input) {
         String str = "res/grid/image" + input + ".png";
@@ -84,7 +56,13 @@ public class GridReadCreate extends JPanel {
         return im;
     }
 
-    //  Reads the file. Variable name (a string) is the name of the input file.
+    /*
+    * Reads a file into the system. Used in conjunction with translateTo2DArray()
+    *
+    * @param name  the name of the file to be read
+    *
+    * @return  a list of strings containing each line of the input file
+    */
     List<String> readFile(String name) throws IOException {
         Path path = Paths.get(name);
         return Files.readAllLines(path, ENCODE);
@@ -92,7 +70,9 @@ public class GridReadCreate extends JPanel {
 
     /*
      * Changes the string List that is read in from the text file and puts the info
-     * in the 2D int array. Used in conjunction with readFile()
+     * in the 2D int array. Used in conjunction with readFile().
+     *
+     * @param list  the list of strings containing each line of file data
      */
     void translateTo2DArray(List<String> list) {
         for (int i = 0; i < 15; i++) {
@@ -106,10 +86,12 @@ public class GridReadCreate extends JPanel {
     }
 
     /*
-     * Iterates through the array and prints out the corresponding images.
+     * Iterates through the array and prints out the corresponding images. Images are 30x30 pixels, so using the array
+     * locations (i,j) multiplied by 30 generates the location of the images. Also prints player's current score.
      *
-     * Images are 30x30 pixels, so using the array locations (i,j) multiplied by
-     * 30 should work fine for the location of the images.
+     *@param g  Graphics object that can change font, font color, and contains a method to print a string.
+     *@param font  the font that the score will be printed in
+     *@param fontColor  the color that the font will be printed in
      */
     void printToScreen(Graphics g, Font font, Color fontColor) {
         int iMax = arr.length;
@@ -128,7 +110,12 @@ public class GridReadCreate extends JPanel {
         g.drawString(s, 20, 20);
     }
 
-    //the input is the Pacman position
+    /*
+    * Uses the pacman position to redraw the board by replacing dots with blank spaces when the pacman reaches that space.
+    *
+    * @param pacPosX  the pacman character's x-position
+    * @param pacPosY  the pacman character's y-position
+    */
     void update(int pacPosX, int pacPosY) {
         int x = pacPosX / 30; //switch from pixel position to array location
         int y = pacPosY / 30;
@@ -139,6 +126,11 @@ public class GridReadCreate extends JPanel {
         }
     }
 
+    /*
+    * Determines if the game has been won.
+    *
+    * @return  true if the game has been won; otherwise, false
+    */
     boolean winCondition() {
         return totalDots == 0;
     }

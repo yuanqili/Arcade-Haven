@@ -10,6 +10,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+* A GridReadCreate object reads an input file containing lines of numbers corresponding to grid pieces. It also
+* then translates this file into an array containing the correct numbers for each location, and draws those images.
+* GridReadCreate also keeps track of the player's current score and can determine if the player has won at any time.
+*/
+
 public class GridReadCreate extends JPanel {
 
     /** Name of the file where grid data is stored*/

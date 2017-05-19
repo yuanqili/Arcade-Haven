@@ -29,18 +29,17 @@ public class GameEngine extends JPanel implements ActionListener
     Color fontColor = new Color(255, 54, 42);
 
     GridReadCreate grid = new GridReadCreate();
-    pacman pac;
-    ghost gho;
-    ghost gho2;
-    ghost gho3;
-    ghost gho4;
+    Pacman pac;
+    Ghost gho;
+    Ghost gho2;
+    Ghost gho3;
+    Ghost gho4;
 
     int ghostNum = 4; //number of ghosts
     int[] ghostsX = new int[4]; //x position of ghosts
     int[] ghostsY = new int[4]; //y position of ghosts
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         GameEngine game = new GameEngine();
         game.setUp();
         game.run();
@@ -70,19 +69,17 @@ public class GameEngine extends JPanel implements ActionListener
         frame.setFocusable(true);
     }
 
-    void characterSetUp()
-    {
+    void characterSetUp() {
         alive = true;
         start = false;
-        pac = new pacman(grid, lives);
-        gho = new ghost(grid, 300,30, "src/pacman/images/ghost_r.png");
-        gho2 = new ghost(grid, 30, 210, "src/pacman/images/ghost_o.png");
-        gho3 = new ghost(grid, 120, 390, "src/pacman/images/ghost_p.png");
-        gho4 = new ghost(grid, 360, 240, "src/pacman/images/ghost_b.png");
+        pac = new Pacman(grid, lives);
+        gho = new Ghost(grid,  300,  30, "res/images/ghost_r.png");
+        gho2 = new Ghost(grid,  30, 210, "res/images/ghost_o.png");
+        gho3 = new Ghost(grid, 120, 390, "res/images/ghost_p.png");
+        gho4 = new Ghost(grid, 360, 240, "res/images/ghost_b.png");
     }
 
-    void run() //starts the game
-    {
+    void run() {
         //setUp();
         while(running) //checks if the game is stopped yet
         {
@@ -127,14 +124,10 @@ public class GameEngine extends JPanel implements ActionListener
     {
         g.drawString("YOU LOST!", 190, 220);
     }
-    private void pauseScreen(Graphics g) {  g.drawString("PAUSE", 190, 220); }
-    private void startScreen(Graphics g) {  g.drawString("PRESS SPACE TO START", 150, 220);    }
+    private void pauseScreen(Graphics g) { g.drawString("PAUSE", 190, 220); }
+    private void startScreen(Graphics g) { g.drawString("PRESS SPACE TO START", 150, 220); }
 
-
-
-
-    void update() //updates the frames
-    {
+    void update() {
         alive = pac.updateCharacter(ghostsX, ghostsY, ghostNum);
         gho.updateCharacter();
         gho2.updateCharacter();
@@ -145,8 +138,7 @@ public class GameEngine extends JPanel implements ActionListener
         state = (frameCount/animationRate) % 4;
     }
 
-    public void draw(Graphics g) //draws the frame
-    {
+    public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g.fillRect(0, 0, width, height);
         grid.printToScreen(g, font, fontColor);
@@ -158,55 +150,51 @@ public class GameEngine extends JPanel implements ActionListener
         String l = "Lives: " + lives;
         g.drawString(l, 360, 20);
         if(grid.winCondition())
-        {
             winScreen(g);
-        }
         if(pac.lossCondition())
-        {
             lossScreen(g);
-        }
         if(pause)
-        {
             pauseScreen(g);
-        }
         if(!start)
-        {
             startScreen(g);
-        }
     }
 
     class TAdapter extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent e) {
-
             int key = e.getKeyCode();
-
             if (running) {
-                if (key == KeyEvent.VK_LEFT) {
-                    pause = false;
-                    pac.direction = key;
-                } else if (key == KeyEvent.VK_RIGHT) {
-                    pause = false;
-                    pac.direction = key;
-                } else if (key == KeyEvent.VK_UP) {
-                    pause = false;
-                    pac.direction = key;
-                } else if (key == KeyEvent.VK_DOWN) {
-                    pause = false;
-                    pac.direction = key;
-                } else if (key == KeyEvent.VK_ESCAPE) {
-                    running = false;
-                } else if (key == KeyEvent.VK_P) {
-                    pause = true;
-                } else if (key == KeyEvent.VK_SPACE) {
-                    start = true;
+                switch (key) {
+                    case KeyEvent.VK_LEFT:
+                        pause = false;
+                        pac.direction = key;
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        pause = false;
+                        pac.direction = key;
+                        break;
+                    case KeyEvent.VK_UP:
+                        pause = false;
+                        pac.direction = key;
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        pause = false;
+                        pac.direction = key;
+                        break;
+                    case KeyEvent.VK_ESCAPE:
+                        running = false;
+                        break;
+                    case KeyEvent.VK_P:
+                        pause = true;
+                        break;
+                    case KeyEvent.VK_SPACE:
+                        start = true;
+                        break;
                 }
-            } else {
-                if (key == 's' || key == 'S') {
-                    running = true;
-                    run();
-                }
+            } else if (key == 's' || key == 'S') {
+                running = true;
+                run();
             }
         }
     }

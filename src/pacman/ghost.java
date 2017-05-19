@@ -1,45 +1,43 @@
 package pacman;
 
-import java.util.Random;
-
-import javax.imageio.*;
-import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
-public class ghost {
+public class Ghost {
+
     int direction = 3;
-    int x=60;
-    int y=30;
+    int x = 60;
+    int y = 30;
     int dx, dy;
-    int step =1;
-    int width= 800;
+    int step = 1;
+    int width = 800;
     int height = 400;
     int[][] array = {};
     BufferedImage ghostImage;
     String file_name;
 
-    void prt(String s){
+    public Ghost(GridReadCreate grc, int x_cor, int y_cor, String file) {
+        file_name = file;
+        loadImages();
+        int xsize = grc.arr.length;
+        int ysize = grc.arr[0].length;
+        x = x_cor;
+        y = y_cor;
+        array = new int[xsize][ysize];
+
+        for (int i = 0; i < xsize; i++)
+            for (int j = 0; j < ysize; j++)
+                array[j][i] = grc.arr[i][j];
+    }
+
+    void prt(String s) {
         System.out.print(s);
     }
 
-    public ghost(GridReadCreate grc, int x_cor, int y_cor, String file)
-    {
-        file_name = file;
-        loadImages();
-        int xsize = grc.arr.length; int ysize = grc.arr[0].length;
-        x = x_cor; y = y_cor;
-        array = new int [xsize][ysize];
-
-        for (int i=0; i<xsize; i++){
-            for (int j=0; j<ysize; j++){
-                array[j][i] = grc.arr[i][j];
-            }
-        }
-    }
     public void loadImages() {
         try {
             ghostImage = ImageIO.read(new File(file_name));
@@ -49,7 +47,7 @@ public class ghost {
 
     }
 
-    private int getDirection(){
+    private int getDirection() {
         Random rand = new Random();
         int n = rand.nextInt(4); //int m = rand.nextInt(2) + 1;
         return n;
@@ -58,15 +56,14 @@ public class ghost {
     // updateCharacter needs to be change, currently it moves step by step
     // which means can change direction one step and another step
     // needs to proceed until a wall, then call update character()
-    public void updateCharacter()
-    {
-        int [] checkArr = {0,0,0,0}; // should add range checker here
-        int xx = x/30, yy = y/30;
+    public void updateCharacter() {
+        int[] checkArr = {0, 0, 0, 0}; // should add range checker here
+        int xx = x / 30, yy = y / 30;
         //prt("x is : "+x+" y is: "+y+'\n');
         //prt("xx is : "+xx+" yy is: "+yy+'\n');
         boolean leftedge = (xx == 0);
         boolean rightedge = (xx == 14);
-        switch(x) {
+        switch (x) {
             case -29:
                 x = 449;
                 leftedge = false;
@@ -80,45 +77,50 @@ public class ghost {
         }
         //handles right/left side wrapping
 
-        if (rightedge || array[(x+30)/30][yy]<=1 && y%30==0) {checkArr[0]++;}//Right
+        if (rightedge || array[(x + 30) / 30][yy] <= 1 && y % 30 == 0) {
+            checkArr[0]++;
+        }//Right
         //prt("Right: \n");
         //prt("looking at num: "+array[(x+15)/30][yy]+'\n');
 
-        if (array[xx][(y+30)/30]<=1 && x%30==0) {checkArr[1]++;}//Down
+        if (array[xx][(y + 30) / 30] <= 1 && x % 30 == 0) {
+            checkArr[1]++;
+        }//Down
         //prt("Down: \n");
         //prt("looking at num: "+array[xx][yy+1]+'\n');
 
-        if (leftedge || array[(x-1)/30][yy]<=1 && y%30==0) {checkArr[2]++;}//Left
+        if (leftedge || array[(x - 1) / 30][yy] <= 1 && y % 30 == 0) {
+            checkArr[2]++;
+        }//Left
         //prt("Left: \n");
         //prt("looking at num: "+array[xx][yy]+'\n');
 
-        if (array[xx][(y-1)/30]<=1 && x%30==0) {checkArr[3]++;}//Up
+        if (array[xx][(y - 1) / 30] <= 1 && x % 30 == 0) {
+            checkArr[3]++;
+        }//Up
         //prt("Up: \n");
         //prt("looking at num: "+array[xx][yy-1]+'\n');
 
 
         int check = 10;
-        // check is the index of one of the 1's in checkArr
-        while (check == 10){
 
-            if (checkArr[direction] == 1){
+        // check is the index of one of the 1's in checkArr
+        while (check == 10) {
+            if (checkArr[direction] == 1)
                 check = direction;
-            }
-            //prt("while loop\n");
-            else {
+            else
                 direction = getDirection();
-            }
         }
-        switch(check)
-        {
+
+        switch (check) {
             case 0:        //Right
                 x += step;
                 //prt("Right: x of "+(x-step)+" changed to "+x+"\n");
                 break;
             case 1:        //Down
                 y += step;
-                if(y>height)
-                    y=height;
+                if (y > height)
+                    y = height;
                 //prt("Down: y of "+(y-step)+" changed to "+y+"\n");
                 break;
             case 2:        //Left
@@ -127,14 +129,14 @@ public class ghost {
                 break;
             case 3:        //Up
                 y -= step;
-                if(y < 0)
+                if (y < 0)
                     y = 0;
                 //prt("Up: y of "+(y+step)+" changed to "+y+"\n");
                 break;
         }
     }
-    public void drawGhost(Graphics2D g)
-    {
+
+    public void drawGhost(Graphics2D g) {
         g.drawImage(ghostImage, x, y, null);
     }
 

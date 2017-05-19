@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class pacman {
+public class Pacman {
     int direction, po_direction, ctn_direction;
     boolean stuck = false;
     int x=30;
@@ -27,8 +27,7 @@ public class pacman {
         System.out.print(s);
     }
 
-    public pacman(GridReadCreate grc, int numLives)
-    {
+    public Pacman(GridReadCreate grc, int numLives) {
         direction = KeyEvent.VK_RIGHT;
         po_direction = KeyEvent.VK_RIGHT;
         ctn_direction = KeyEvent.VK_RIGHT;
@@ -53,66 +52,66 @@ public class pacman {
         }
         */
         try {
-            pacmanL[0] = ImageIO.read(new File("src/pacman/images/left1.png"));
+            pacmanL[0] = ImageIO.read(new File("res/images/left1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanL[1] = ImageIO.read(new File("src/pacman/images/left2.png"));
+            pacmanL[1] = ImageIO.read(new File("res/images/left2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }try {
-            pacmanL[2] = ImageIO.read(new File("src/pacman/images/left3.png"));
+            pacmanL[2] = ImageIO.read(new File("res/images/left3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanR[0] = ImageIO.read(new File("src/pacman/images/right1.png"));
+            pacmanR[0] = ImageIO.read(new File("res/images/right1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanR[1] = ImageIO.read(new File("src/pacman/images/right2.png"));
+            pacmanR[1] = ImageIO.read(new File("res/images/right2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanR[2] = ImageIO.read(new File("src/pacman/images/right3.png"));
+            pacmanR[2] = ImageIO.read(new File("res/images/right3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanD[0] = ImageIO.read(new File("src/pacman/images/down1.png"));
+            pacmanD[0] = ImageIO.read(new File("res/images/down1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanD[1] = ImageIO.read(new File("src/pacman/images/down2.png"));
+            pacmanD[1] = ImageIO.read(new File("res/images/down2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanD[2] = ImageIO.read(new File("src/pacman/images/down3.png"));
+            pacmanD[2] = ImageIO.read(new File("res/images/down3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanU[0] = ImageIO.read(new File("src/pacman/images/up1.png"));
+            pacmanU[0] = ImageIO.read(new File("res/images/up1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanU[1] = ImageIO.read(new File("src/pacman/images/up2.png"));
+            pacmanU[1] = ImageIO.read(new File("res/images/up2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanU[2] = ImageIO.read(new File("src/pacman/images/up3.png"));
+            pacmanU[2] = ImageIO.read(new File("res/images/up3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanL[3] = ImageIO.read(new File("src/pacman/images/pacman.png"));
+            pacmanL[3] = ImageIO.read(new File("res/images/pacman.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -214,17 +213,10 @@ public class pacman {
         return updateLives(ghostPosX, ghostPosY, ghostNum);
 
     }
-    public void drawPac(Graphics2D g, int state)
-    {
+    public void drawPac(Graphics2D g, int state) {
         int temp_dir;
-        if (x%30 == 0 && y%30 == 0){
-            temp_dir = direction;
-        }
-        else {
-            temp_dir = ctn_direction;
-        }
-        switch(temp_dir)
-        {
+        temp_dir = x % 30 == 0 && y % 30 == 0 ? direction : ctn_direction;
+        switch(temp_dir) {
             case KeyEvent.VK_RIGHT:
                 g.drawImage(pacmanR[state], x, y, null);
                 break;
@@ -242,31 +234,18 @@ public class pacman {
 
 
 
-    boolean updateLives(int[] ghostsX, int[] ghostsY, int ghostNum)
-    {
-        for(int i =0; i < ghostNum; i++)
-        {
-            if((x/15) == (ghostsX[i]/15) && (y/15) == (ghostsY[i]/15))
-            {
+    boolean updateLives(int[] ghostsX, int[] ghostsY, int ghostNum) {
+        for (int i =0; i < ghostNum; i++) {
+            if ((x/15) == (ghostsX[i]/15) && (y/15) == (ghostsY[i]/15)) {
                 lives--;
                 return false;
             }
-
         }
         return true;
     }
 
     //checks if the playerLost
-    boolean lossCondition()
-    {
-        if(lives<=0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+    boolean lossCondition() {
+        return lives <= 0;
     }
-
 }

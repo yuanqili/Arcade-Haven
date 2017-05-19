@@ -26,6 +26,9 @@ name is "localhost".
 g01-draft/program/out/ $ java -jar out/Arcade-Haven.jar "csil-08.cs.ucsb.edu" 23333
 ```
 
+- username: timcook
+- password: 123456
+
 ## Known issues
 
 It has several issues to be fixed in the next two weeks.

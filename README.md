@@ -5,16 +5,16 @@
 ## Server
 
 The server runs correctly on CSIL machine. Other platform is not guaranteed.
-Copy the code onto a CSIL machine, and runs the server like this **(Note the working directory.)**
+Copy the code onto a CSIL machine, and runs the server like this. **(Note the
+working directory.)**
 
 ```sh
-g01-draft/program/out/ $ java -cp ../lib/mysql-connector-java-5.1.41-bin.jar:. ServerMain
+g01-draft/program/out/ $ java -cp ../lib/mysql-connector-java-5.1.41-bin.jar:. ServerMain [port=23334]
 ```
 
 Or you can run this on your local machine.
 
-Currently the server only listens to port 23333. It will be fixed to listen to
-an port given as the argument.
+The default port is 23334, you can use other port as you wish.
 
 ## Game
 
@@ -23,8 +23,14 @@ second argument is port number. If you run it on you local machine, the host
 name is "localhost". **(Note the working directory.)**
 
 ```sh
-g01-draft/program/ $ java -jar out/Arcade-Haven.jar "csil-08.cs.ucsb.edu" 23333
+g01-draft/program/ $ java -jar out/Arcade-Haven.jar [host="localhost"] [port=23334]
 ```
+
+You can also run the game calling `make default-game`, which runs game using
+the default arguments.
+
+You are allowed to register a new user in the start screen. Or you can use
+the following user.
 
 - username: timcook
 - password: 123456
@@ -37,3 +43,5 @@ It has several issues to be fixed in the next two weeks.
   it doesn't die.
 - Sometimes the dialog box cannot handle incoming messages properly, it will
   displays a wrong message.
+- Sequence number of messages are not synchronized correctly, this is a issue
+  caused by Java's GUI library, which makes multi-threading buggy.

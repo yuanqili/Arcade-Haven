@@ -6,7 +6,7 @@ The server runs correctly on CSIL machine. Other platform is not guaranteed.
 Copy the code onto a CSIL machine, and runs the server like this
 
 ```sh
-g01-draft/out/ $ java -cp ../lib/mysql-connector-java-5.1.41-bin.jar:. ServerMain
+g01-draft/program/out/ $ java -cp ../lib/mysql-connector-java-5.1.41-bin.jar:. ServerMain
 ```
 
 Or you can run this on your local machine.
@@ -18,7 +18,7 @@ second argument is port number. If you run it on you local machine, the host
 name is "localhost".
 
 ```sh
-g01-draft/out/ $ java -jar out/Arcade-Haven.jar "csil-08.cs.ucsb.edu" 23333
+g01-draft/program/out/ $ java -jar out/Arcade-Haven.jar "csil-08.cs.ucsb.edu" 23333
 ```
 
 ## Known issues

@@ -1,5 +1,7 @@
 # Arcade Haven
 
+![img](https://raw.githubusercontent.com/yuanqili/Arcade-Haven/May20Meeting/program/web/img/logo.png)
+
 ## Server
 
 The server runs correctly on CSIL machine. Other platform is not guaranteed.

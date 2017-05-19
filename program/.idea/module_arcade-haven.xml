@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_arcade-haven" default="compile.module.arcade-haven">
+  <dirname property="module.arcade-haven.basedir" file="${ant.file.module_arcade-haven}"/>
+  
+  <property name="module.jdk.home.arcade-haven" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.arcade-haven" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.arcade-haven" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.arcade-haven" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="arcade-haven.output.dir" value="${module.arcade-haven.basedir}/../out/production/Arcade-Haven"/>
+  <property name="arcade-haven.testoutput.dir" value="${module.arcade-haven.basedir}/../out/test/Arcade-Haven"/>
+  
+  <path id="arcade-haven.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="arcade-haven.module.production.classpath">
+    <path refid="${module.jdk.classpath.arcade-haven}"/>
+  </path>
+  
+  <path id="arcade-haven.runtime.production.module.classpath">
+    <pathelement location="${arcade-haven.output.dir}"/>
+  </path>
+  
+  <path id="arcade-haven.module.classpath">
+    <path refid="${module.jdk.classpath.arcade-haven}"/>
+    <pathelement location="${arcade-haven.output.dir}"/>
+  </path>
+  
+  <path id="arcade-haven.runtime.module.classpath">
+    <pathelement location="${arcade-haven.testoutput.dir}"/>
+    <pathelement location="${arcade-haven.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.arcade-haven">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.arcade-haven">
+    <patternset refid="excluded.from.module.arcade-haven"/>
+  </patternset>
+  
+  <path id="arcade-haven.module.sourcepath">
+    <dirset dir="${module.arcade-haven.basedir}/../../program">
+      <include name="res"/>
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.arcade-haven" depends="compile.module.arcade-haven.production,compile.module.arcade-haven.tests" description="Compile module Arcade-Haven"/>
+  
+  <target name="compile.module.arcade-haven.production" depends="register.custom.compilers" description="Compile module Arcade-Haven; production classes">
+    <mkdir dir="${arcade-haven.output.dir}"/>
+    <javac2 destdir="${arcade-haven.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.arcade-haven}/javac">
+      <compilerarg line="${compiler.args.arcade-haven}"/>
+      <bootclasspath refid="arcade-haven.module.bootclasspath"/>
+      <classpath refid="arcade-haven.module.production.classpath"/>
+      <src refid="arcade-haven.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.arcade-haven"/>
+    </javac2>
+    
+    <copy todir="${arcade-haven.output.dir}">
+      <fileset dir="${module.arcade-haven.basedir}/../res">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.arcade-haven.basedir}/../src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.arcade-haven.tests" depends="register.custom.compilers,compile.module.arcade-haven.production" description="compile module Arcade-Haven; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.arcade-haven" description="cleanup module">
+    <delete dir="${arcade-haven.output.dir}"/>
+    <delete dir="${arcade-haven.testoutput.dir}"/>
+  </target>
+</project>

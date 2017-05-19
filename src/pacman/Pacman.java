@@ -9,24 +9,75 @@ import java.io.File;
 import java.io.IOException;
 
 public class Pacman {
+    /**
+     * Direction is key input of moving direction.
+     */
     int direction, po_direction, ctn_direction;
+
+    /**
+     * Checks if the pacman is stuck.
+     */
     boolean stuck = false;
+
+    /**
+     * X coordinate of pacman.
+     */
     int x=30;
+
+    /**
+     * Y coordinate of pacman.
+     */
     int y=30;
+
+    /**
+     * Step of pacman movement.
+     */
     int step =1;
-    int width= 800;
+
+    /**
+     * Height limitation of movement.
+     */
     int height = 400;
+
+    /**
+     * Array that stores the map data.
+     */
     int[][] array;
+
+    /**
+     * Remaining lives of pacman.
+     */
     int lives = 3; //number of lives you have
+
+    /**
+     * Left facing pacman image.
+     */
     private BufferedImage[] pacmanL = new BufferedImage[4];
+
+    /**
+     * Right facing pacman image.
+     */
     private BufferedImage[] pacmanR = new BufferedImage[4];
+
+    /**
+     * Down facing pacman image.
+     */
     private BufferedImage[] pacmanD = new BufferedImage[4];
+
+    /**
+     * Up facing pacman image.
+     */
     private BufferedImage[] pacmanU = new BufferedImage[4];
 
-    void prt(String s){
-        System.out.print(s);
-    }
-
+    /**
+     *  Constructor for pacman class, initiate pacman object
+     * @param grc GridReadCreate Object
+     * @param numLives Number of lives remaining
+     * @param L Left facing pacman image
+     * @param U Up facing pacman image
+     * @param R Right facing pacman image
+     * @param D Down facing pacman image
+     */
     public Pacman(GridReadCreate grc, int numLives, BufferedImage[] L, BufferedImage[] U, BufferedImage[] R, BufferedImage[] D) {
         pacmanL = L; pacmanD = D; pacmanR = R; pacmanU = U;
         direction = KeyEvent.VK_RIGHT;
@@ -43,7 +94,13 @@ public class Pacman {
         lives = numLives;
     }
 
-
+    /**
+     * Update the pacman object's position
+     * @param ghostPosX Array of X positions of the ghosts
+     * @param ghostPosY Array of Y positions of the ghosts
+     * @param ghostNum  Numebr of ghosts
+     * @return If the pacman is still alive, false means not dead
+     */
     public boolean updateCharacter(int[] ghostPosX, int[] ghostPosY, int ghostNum)
     {
         int[] checkArr = {0, 0, 0, 0}; // should add range checker here
@@ -137,6 +194,12 @@ public class Pacman {
         return updateLives(ghostPosX, ghostPosY, ghostNum);
 
     }
+
+    /**
+     *  Draws the pacman onto the graphic board.
+     * @param g Graphic2D object g
+     * @param state pacman facing information
+     */
     public void drawPac(Graphics2D g, int state) {
         int temp_dir;
         temp_dir = x % 30 == 0 && y % 30 == 0 ? direction : ctn_direction;
@@ -156,7 +219,13 @@ public class Pacman {
         }
     }
 
-
+    /**
+     * Updates the remaining lives of the pacman.
+     * @param ghostsX Array of X positions of the ghosts
+     * @param ghostsY Array of Y positions of the ghosts
+     * @param ghostNum Number of remaining ghosts
+     * @return  If the pacman is still alive, false means not dead
+     */
 
     boolean updateLives(int[] ghostsX, int[] ghostsY, int ghostNum) {
         for (int i =0; i < ghostNum; i++) {

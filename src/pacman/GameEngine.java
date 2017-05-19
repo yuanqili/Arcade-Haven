@@ -7,57 +7,103 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 
+/** The class GameEngine is used to run the main game loop, set up the frame, and draw the characters and the grid onto the       * frame. It also implements.*/
 public class GameEngine extends JPanel implements ActionListener
 {
     private JFrame frame;
-    int delay=10; //controls the speed
-    boolean running = true;
-    int width =450; //sets the width of the canvas
-    int height = 490; // sets height of the canvas
-    int state;
-    int frameCount;
-    int animationRate = 5; //the speed in which the pacman character changes animation
-    boolean pause = false; //a variable used to check if the game is paused
-    boolean start = false; //a variable denoting whether or not the game began
-    boolean alive = false; //checks if pacman is alive
-    int lives = 3;
 
-    //The font to be used
+    /** Controls the speed of the game. The lower the value, the faster the game goes by */
+    int delay=10;
+
+    /** A variable that keeps track of whether the game is running or not */
+    boolean running = true;
+    
+    /** Sets the width of the canvas */
+    int width =450;
+    
+    /** Sets the height of the canvas */
+    int height = 490;
+    
+    /** The state that the pacman is in which is used to animate the pacman character. */
+    int state;
+    
+    /** Keeps track of the numbers of loops the game has executed. */
+    int frameCount;
+    
+    /** the speed in which the pacman character changes animation. It is inversely perportional to the speed. */
+    int animationRate = 5; 
+    
+    /** A variable to keep track of whether the game is paused.*/
+    boolean pause = false;
+    
+    /** A variable to check whether the game has began. */
+    boolean start = false;
+    
+    /** A variable to check if the pacman character is alive. */
+    boolean alive = false;
+    
+    /** Denotes the number of lives the pacman character has. */
+    int lives = 3;
+    
+    /** Contains the filenames for the ghost images. */
+    String [] filenames = {"res/images/ghost_r.png", "res/images/ghost_o.png", "res/images/ghost_p.png", "res/images/ghost_b.png"};
+
+    /** The font to be used for the in game text.*/
     private static Font font = new Font("Times New Roman", Font.BOLD, 14);
 
-    //color used for the text
+    /** The color used for the in game text. */
     Color fontColor = new Color(255, 54, 42);
 
+    /** An instance of GridReadCreate which represents the grid for the game. */
     GridReadCreate grid = new GridReadCreate();
-    pacman pac;
-    ghost gho;
-    ghost gho2;
-    ghost gho3;
-    ghost gho4;
+    
+    /** An instance of Pacman, containing the character variables and methods. */
+    Pacman pac;
+    
+    /** An instance of Ghost, containing the character variables and methods for the AI. */
+    Ghost gho;
+    Ghost gho2;
+    Ghost gho3;
+    Ghost gho4;
+    
+    /** The number of ghosts present in the game. */
+    int ghostNum = 4;
+    
+    /** An array of the x positions of the ghosts. */
+    int[] ghostsX = new int[ghostNum];
+    
+    /** An array of the y positions of the ghosts. */
+    int[] ghostsY = new int[ghostNum];
 
-    int ghostNum = 4; //number of ghosts
-    int[] ghostsX = new int[4]; //x position of ghosts
-    int[] ghostsY = new int[4]; //y position of ghosts
+    /** An instance of ImageLoader which is in charge of loading the images for all the characters. **/
+    ImageLoader imgLdr;
 
-    public static void main(String[] args)
-    {
+    
+    public static void main(String[] args) {
         GameEngine game = new GameEngine();
         game.setUp();
         game.run();
         System.exit(0);
     }
+    
+    
+    /** Overrides JPanel's paintComponent to draw the characters and the grid onto the frame.
+     *  @param g Graphics object that needs to be passed to the paintComponent class of JPanel. */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         draw(g);
     }
 
-    void setUp()
+    /** Contains a function call to frameSetUp() and characterSetUp() to set up the various components of the game. Also creates      * an instance of ImageLoader to load all the character images */ 
+    public void setUp()
     {
         frameSetUp();
+        imgLdr = new ImageLoader(filenames);
         characterSetUp();
     }
 
+    /** Creates the frame, sets the title, size and close operation. */
     void frameSetUp()
     {
         frame = new JFrame();
@@ -70,20 +116,19 @@ public class GameEngine extends JPanel implements ActionListener
         frame.setFocusable(true);
     }
 
-    void characterSetUp()
-    {
+    /** resets the pacman character to being alive and recalls the constructor of all the characters with their initial              *  positions. */
+    void characterSetUp() {
         alive = true;
         start = false;
-        pac = new pacman(grid, lives);
-        gho = new ghost(grid, 300,30, "src/pacman/images/ghost_r.png");
-        gho2 = new ghost(grid, 30, 210, "src/pacman/images/ghost_o.png");
-        gho3 = new ghost(grid, 120, 390, "src/pacman/images/ghost_p.png");
-        gho4 = new ghost(grid, 360, 240, "src/pacman/images/ghost_b.png");
+        pac = new Pacman(grid, lives, imgLdr.pacmanL, imgLdr.pacmanU, imgLdr.pacmanR, imgLdr.pacmanD);
+        gho = new Ghost(grid,  300,  30, imgLdr.ghostImages[0]);
+        gho2 = new Ghost(grid,  30, 210, imgLdr.ghostImages[1]);
+        gho3 = new Ghost(grid, 120, 390, imgLdr.ghostImages[2]);
+        gho4 = new Ghost(grid, 360, 240, imgLdr.ghostImages[3]);
     }
 
-    void run() //starts the game
-    {
-        //setUp();
+    /** Runs the game loop if the winning and losing conditions have not been met yet, the game is not paused, the game is            *  running, the game has started, and Pacman is alive. If Pacman is dead it updates the number of lives and resets the          *  characters and the starting prompt. It repaints the frame as long as the game is running, whether or not the other            *  conditions are met. Once the game stops running, the window is closed. */
+    public void run() {
         while(running) //checks if the game is stopped yet
         {
             while(!(grid.winCondition())  && !(pac.lossCondition()) && !pause && start && running && alive)
@@ -118,23 +163,30 @@ public class GameEngine extends JPanel implements ActionListener
 
 
 
-    //displays the winning screen
+    /** Displays the winning screen.
+     *  @param g Graphics object that contains a method for drawing strings. */
     private void winScreen(Graphics g)
     {
         g.drawString("YOU WON!", 190, 220);
     }
+    
+    /** Displays the losing screen.
+     *  @param g Graphics object that contains a method for drawing strings. */
     private void lossScreen(Graphics g)
     {
         g.drawString("YOU LOST!", 190, 220);
     }
-    private void pauseScreen(Graphics g) {  g.drawString("PAUSE", 190, 220); }
-    private void startScreen(Graphics g) {  g.drawString("PRESS SPACE TO START", 150, 220);    }
+    
+    /** Displays the pause screen.
+     *  @param g Graphics object that contains a method for drawing strings. */
+    private void pauseScreen(Graphics g) { g.drawString("PAUSE", 190, 220); }
+    
+    /** Displays the start screen.
+     *  @param g Graphics object that contains a method for drawing strings. */
+    private void startScreen(Graphics g) { g.drawString("PRESS SPACE TO START", 150, 220); }
 
-
-
-
-    void update() //updates the frames
-    {
+    /** Updates all the characters as well as the grid. Also updates whether or not Pacman as well as the state variable, then        *  increments the frameCount. */
+    void update() {
         alive = pac.updateCharacter(ghostsX, ghostsY, ghostNum);
         gho.updateCharacter();
         gho2.updateCharacter();
@@ -145,8 +197,9 @@ public class GameEngine extends JPanel implements ActionListener
         state = (frameCount/animationRate) % 4;
     }
 
-    public void draw(Graphics g) //draws the frame
-    {
+    /** Calls the draw functions of the grid, pacman, and ghosts. Also draws the number of remaining lives on the top right of        *  the screen. It checks if the winning or losing condition is met, if so it calls winScreen or lossScreen respectively.        *  If the pause variable is true or the start variable is false, it calls the pauseScreen or startScreen functions              *  respectively.
+     *  @param g Graphics instance which is passed to the printToScreen method of grid and used to create an instance of              *  Graphics2D which is passed into the character classes. */
+    public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g.fillRect(0, 0, width, height);
         grid.printToScreen(g, font, fontColor);
@@ -158,56 +211,52 @@ public class GameEngine extends JPanel implements ActionListener
         String l = "Lives: " + lives;
         g.drawString(l, 360, 20);
         if(grid.winCondition())
-        {
             winScreen(g);
-        }
         if(pac.lossCondition())
-        {
             lossScreen(g);
-        }
         if(pause)
-        {
             pauseScreen(g);
-        }
         if(!start)
-        {
             startScreen(g);
-        }
     }
 
+    /** A class which includes functions to listen to the key presses.*/
     class TAdapter extends KeyAdapter {
-
+    
+        /** Overrides the keyPressed function of KeyAdapter to use the direction key events to change the direction of the                *  pacman character and set the pause variable to false. The p button is used to set the pause variable to true which            *  pauses the game. The spacebar is used to set the start variable to true, which starts the game. The escape button            * sets the running variable to false which closes the window.
+         *  @param e Instance of KeyEvent which is used to call the getKeyCode function.*/
         @Override
         public void keyPressed(KeyEvent e) {
-
             int key = e.getKeyCode();
-
             if (running) {
-                if (key == KeyEvent.VK_LEFT) {
-                    pause = false;
-                    pac.direction = key;
-                } else if (key == KeyEvent.VK_RIGHT) {
-                    pause = false;
-                    pac.direction = key;
-                } else if (key == KeyEvent.VK_UP) {
-                    pause = false;
-                    pac.direction = key;
-                } else if (key == KeyEvent.VK_DOWN) {
-                    pause = false;
-                    pac.direction = key;
-                } else if (key == KeyEvent.VK_ESCAPE) {
-                    running = false;
-                } else if (key == KeyEvent.VK_P) {
-                    pause = true;
-                } else if (key == KeyEvent.VK_SPACE) {
-                    start = true;
+                switch (key) {
+                    case KeyEvent.VK_LEFT:
+                        pause = false;
+                        pac.direction = key;
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        pause = false;
+                        pac.direction = key;
+                        break;
+                    case KeyEvent.VK_UP:
+                        pause = false;
+                        pac.direction = key;
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        pause = false;
+                        pac.direction = key;
+                        break;
+                    case KeyEvent.VK_ESCAPE:
+                        running = false;
+                        break;
+                    case KeyEvent.VK_P:
+                        pause = true;
+                        break;
+                    case KeyEvent.VK_SPACE:
+                        start = true;
+                        break;
                 }
-            } else {
-                if (key == 's' || key == 'S') {
-                    running = true;
-                    run();
-                }
-            }
+            } 
         }
     }
 

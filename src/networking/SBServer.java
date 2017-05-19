@@ -1,3 +1,5 @@
+package networking;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,9 +17,9 @@ import java.util.logging.Logger;
  * to each clients using a specific SBTalk protocol. Each message is of the
  * format:
  *
- *   Message = Type Action Data
+ *   Message = networking.Type networking.Action Data
  *
- * There are two Type for now: MSG and CTRL. MSG is used for user's dialog, and
+ * There are two networking.Type for now: MSG and CTRL. MSG is used for user's dialog, and
  * CTRL is for general purpose, e.g., login, logoff, register, etc.
  */
 public class SBServer {
@@ -150,20 +152,19 @@ public class SBServer {
                         if (db.userIdentityValidation(loginInfo[0], loginInfo[1]) == 0) {
                             name = loginInfo[0];
                             clientWriters.put(name, out);
-                            out.writeObject(serverInfo("succeed", true, msg.getSequence()));
+                            out.writeObject(serverInfo("succeed", true));
                             logger.info("user <" + loginInfo[0] + "> log in");
                         } else {
-                            out.writeObject(serverInfo("fail", false, msg.getSequence()));
+                            out.writeObject(serverInfo("fail", false));
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        out.writeObject(serverInfo("wrong format", false, msg.getSequence()));
+                        out.writeObject(serverInfo("wrong format", false));
                     }
 
                 } else if (action == Action.bye) {
 
                     clientWriters.remove(name);
-                    out.writeObject(serverInfo("bye", true, msg.getSequence()));
+                    out.writeObject(serverInfo("bye", true));
                     try {
                         socket.close();
                     } catch (IOException e) {
@@ -173,26 +174,24 @@ public class SBServer {
                 } else if (action == Action.signup) {
 
                     String[] signupInfo = msg.getBody().split(" ");
-                    if (db.userRegistration(signupInfo[0], signupInfo[1])) {
-                        out.writeObject(serverInfo("succeed", true, msg.getSequence()));
-                    } else {
-                        out.writeObject(serverInfo("fail", false, msg.getSequence()));
-                    }
+                    out.writeObject(
+                            db.userRegistration(signupInfo[0], signupInfo[1])
+                            ? serverInfo("succeed", true)
+                            : serverInfo("fail", false));
 
                 } else if (action == Action.userlist) {
 
                     StringBuilder sb = new StringBuilder();
                     clientWriters.forEach((username, out) -> sb.append(username).append(" "));
-                    logger.info("userlist: " + sb.toString());
-                    out.writeObject(serverInfo(sb.toString(), true, msg.getSequence()));
+                    out.writeObject(serverInfo(sb.toString(), true));
 
                 } else {
-                    out.writeObject(serverInfo("cannot understand message", false, msg.getSequence()));
+                    out.writeObject(serverInfo("cannot understand message", false));
                 }
             } else if (type == Type.info) {
-                out.writeObject(serverInfo("received", true, msg.getSequence()));
+                out.writeObject(serverInfo("received", true));
             } else {
-                out.writeObject(serverInfo("cannot understand message", false, msg.getSequence()));
+                out.writeObject(serverInfo("cannot understand message", false));
             }
         }
 
@@ -252,7 +251,7 @@ public class SBServer {
             } catch (IOException e) {
                 logger.warning(e.getMessage());
             } catch (ClassNotFoundException e) {
-                logger.warning("Class SBMessage not found");
+                logger.warning("Class networking.SBMessage not found");
             } finally {
                 if (name != null)
                     clientWriters.remove(name);

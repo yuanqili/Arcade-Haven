@@ -1,8 +1,8 @@
+package networking;
+
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.nio.channels.SocketChannel;
-import java.util.List;
 
 /**
  * <p>A plug-and-play client instance. It has two sets of sending functions:
@@ -25,15 +25,13 @@ import java.util.List;
 public class SBClient {
 
     /** SocketChannel connected to the server. */
-    SocketChannel schannel;
+    private SocketChannel schannel;
 
     /** Reader of socket, used to receive messages from the server. */
-    ObjectInputStream in;
+    private ObjectInputStream in;
 
     /** Writer of socket, used to write messages to the server. */
-    ObjectOutputStream out;
-
-    List<SBMessage> arrivalMessages;
+    private ObjectOutputStream out;
 
     /**
      * Current sequence number that is used to send the next message. It is
@@ -45,61 +43,24 @@ public class SBClient {
      * Starts a client instance
      * @param host host address (e.g., csil-xx.cs.ucsb.edu)
      * @param port host port number
-     * @param container container for arrival messages form the server
      * @throws IOException cannot connect to server
      */
-    public SBClient(String host, int port, List<SBMessage> container) throws IOException {
-
+    public SBClient(String host, int port)
+            throws IOException, ClassNotFoundException {
+        // set up client connection
         schannel = SocketChannel.open();
         schannel.configureBlocking(true);
         if (!schannel.connect(new InetSocketAddress(host, port)))
             System.exit(1);
         out = new ObjectOutputStream(schannel.socket().getOutputStream());
         in = new ObjectInputStream(schannel.socket().getInputStream());
-
         sequence = (int)(Math.random() * 10000);
-        arrivalMessages = container;
 
-        out.writeObject(new SBMessage().setType(Type.info));
-
-        Thread listen = new Thread(() -> {
-            while (true) {
-                try {
-                    SBMessage msg = (SBMessage) in.readObject();
-                    if (msg == null) return;
-                    System.out.println(msg);
-                    if (arrivalMessages != null) arrivalMessages.add(msg);
-                } catch (EOFException e) {
-                    return;
-                } catch (IOException e) {
-                    System.out.println("Error on reading");
-                } catch (ClassNotFoundException e) {
-                    System.out.println("Error on parsing object");
-                }
-            }
-        });
-        listen.start();
-    }
-
-    class Listener implements Runnable {
-        @Override
-        public void run() {
-            while (true) {
-                try {
-                    SBMessage msg = (SBMessage) in.readObject();
-                    if (msg == null) return;
-                    System.out.println(msg);
-                    if (arrivalMessages != null) arrivalMessages.add(msg);
-                } catch (EOFException e) {
-                    return;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.out.println("Error on reading");
-                } catch (ClassNotFoundException e) {
-                    System.out.println("Error on parsing object");
-                }
-            }
-        }
+        // init handshake
+        SBMessage init = sendInfo("init");
+        System.out.println(init);
+        SBMessage ack = (SBMessage) in.readObject();
+        System.out.println(ack);
     }
 
     /**
@@ -108,6 +69,18 @@ public class SBClient {
      */
     public void close() throws IOException {
         schannel.close();
+    }
+
+    public boolean isAlive() {
+        return schannel.isConnected();
+    }
+
+    public ObjectInputStream getIn() {
+        return in;
+    }
+
+    public ObjectOutputStream getOut() {
+        return out;
     }
 
     public SBMessage login(String username, String password) throws IOException {
@@ -155,39 +128,24 @@ public class SBClient {
                 .setAction(Action.userlist)
                 .setSequence(sequence++);
         out.writeObject(msg);
+        System.out.println("sent: " + msg);
         return msg;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        if (args.length != 2) {
-            System.out.println("Usage: sbclient <host> <port>");
-            return;
-        }
+    public SBMessage sendInfo(String body) throws IOException {
+        SBMessage msg = new SBMessage()
+                .setType(Type.info)
+                .setReceiver("Server")
+                .setBody(body);
+        out.writeObject(msg);
+        return msg;
+    }
 
-        String host = args[0];
-        int port = Integer.parseInt(args[1]);
-
-        Socket sock = new Socket(host, port);
-        BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-        PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
-
-        Thread listen = new Thread(() -> {
-            while (true) {
-                try {
-                    String message = in.readLine();
-                    if (message == null)
-                        return;
-                    System.out.println(message);
-                } catch (IOException e) {
-                    System.out.println("Error on reading");
-                }
-            }
-        });
-        listen.start();
-
-        BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
-        String userInput;
-        while ((userInput = scanner.readLine()) != null)
-            out.println(userInput);
+    public static void main(String[] args)
+            throws IOException, InterruptedException, ClassNotFoundException {
+        SBClient client = new SBClient("csil-24.cs.ucsb.edu", 23333);
+        client.login("sjobs", "12345678");
+        client.userlist();
+        client.logoff();
     }
 }

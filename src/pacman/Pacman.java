@@ -8,31 +8,84 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class pacman {
+/**
+ * The class of pacman, which creates the object of pacman, updates the object of pacman and draws the object of pacman
+ */
+public class Pacman {
+    /**
+     * Direction is key input of moving direction.
+     */
     int direction, po_direction, ctn_direction;
+
+    /**
+     * Checks if the pacman is stuck.
+     */
     boolean stuck = false;
+
+    /**
+     * X coordinate of pacman.
+     */
     int x=30;
+
+    /**
+     * Y coordinate of pacman.
+     */
     int y=30;
+
+    /**
+     * Step of pacman movement.
+     */
     int step =1;
-    int width= 800;
+
+    /**
+     * Height limitation of movement.
+     */
     int height = 400;
-    private BufferedImage[] pacmanL = new BufferedImage[4];
-    private BufferedImage[] pacmanR = new BufferedImage[4];
-    private BufferedImage[] pacmanD = new BufferedImage[4];
-    private BufferedImage[] pacmanU = new BufferedImage[4];
+
+    /**
+     * Array that stores the map data.
+     */
     int[][] array;
+
+    /**
+     * Remaining lives of pacman.
+     */
     int lives = 3; //number of lives you have
 
-    void prt(String s){
-        System.out.print(s);
-    }
+    /**
+     * Left facing pacman image.
+     */
+    private BufferedImage[] pacmanL = new BufferedImage[4];
 
-    public pacman(GridReadCreate grc, int numLives)
-    {
+    /**
+     * Right facing pacman image.
+     */
+    private BufferedImage[] pacmanR = new BufferedImage[4];
+
+    /**
+     * Down facing pacman image.
+     */
+    private BufferedImage[] pacmanD = new BufferedImage[4];
+
+    /**
+     * Up facing pacman image.
+     */
+    private BufferedImage[] pacmanU = new BufferedImage[4];
+
+    /**
+     * Constructor for pacman class, initiate pacman object
+     * @param grc GridReadCreate Object
+     * @param numLives Number of lives remaining
+     * @param L Left facing pacman image
+     * @param U Up facing pacman image
+     * @param R Right facing pacman image
+     * @param D Down facing pacman image
+     */
+    public Pacman(GridReadCreate grc, int numLives, BufferedImage[] L, BufferedImage[] U, BufferedImage[] R, BufferedImage[] D) {
+        pacmanL = L; pacmanD = D; pacmanR = R; pacmanU = U;
         direction = KeyEvent.VK_RIGHT;
         po_direction = KeyEvent.VK_RIGHT;
         ctn_direction = KeyEvent.VK_RIGHT;
-        loadImages();
         int xsize = grc.arr.length; int ysize = grc.arr[0].length;
         array = new int [xsize][ysize];
 
@@ -43,84 +96,14 @@ public class pacman {
         }
         lives = numLives;
     }
-    public void loadImages() {
-        /*File here = new File(".");
-        try {
-            System.out.println(here.getCanonicalPath());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        */
-        try {
-            pacmanL[0] = ImageIO.read(new File("src/pacman/images/left1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanL[1] = ImageIO.read(new File("src/pacman/images/left2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }try {
-            pacmanL[2] = ImageIO.read(new File("src/pacman/images/left3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanR[0] = ImageIO.read(new File("src/pacman/images/right1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanR[1] = ImageIO.read(new File("src/pacman/images/right2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanR[2] = ImageIO.read(new File("src/pacman/images/right3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanD[0] = ImageIO.read(new File("src/pacman/images/down1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanD[1] = ImageIO.read(new File("src/pacman/images/down2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanD[2] = ImageIO.read(new File("src/pacman/images/down3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanU[0] = ImageIO.read(new File("src/pacman/images/up1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanU[1] = ImageIO.read(new File("src/pacman/images/up2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanU[2] = ImageIO.read(new File("src/pacman/images/up3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanL[3] = ImageIO.read(new File("src/pacman/images/pacman.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        pacmanR[3] = pacmanL[3];
-        pacmanD[3] = pacmanL[3];
-        pacmanU[3] = pacmanL[3];
-    }
 
+    /**
+     * Update the pacman object's position
+     * @param ghostPosX Array of X positions of the ghosts
+     * @param ghostPosY Array of Y positions of the ghosts
+     * @param ghostNum  Numebr of ghosts
+     * @return If the pacman is still alive, false means not dead
+     */
     public boolean updateCharacter(int[] ghostPosX, int[] ghostPosY, int ghostNum)
     {
         int[] checkArr = {0, 0, 0, 0}; // should add range checker here
@@ -214,17 +197,16 @@ public class pacman {
         return updateLives(ghostPosX, ghostPosY, ghostNum);
 
     }
-    public void drawPac(Graphics2D g, int state)
-    {
+
+    /**
+     * Draws the pacman onto the graphic board.
+     * @param g Graphic2D object g
+     * @param state pacman facing information
+     */
+    public void drawPac(Graphics2D g, int state) {
         int temp_dir;
-        if (x%30 == 0 && y%30 == 0){
-            temp_dir = direction;
-        }
-        else {
-            temp_dir = ctn_direction;
-        }
-        switch(temp_dir)
-        {
+        temp_dir = x % 30 == 0 && y % 30 == 0 ? direction : ctn_direction;
+        switch(temp_dir) {
             case KeyEvent.VK_RIGHT:
                 g.drawImage(pacmanR[state], x, y, null);
                 break;
@@ -240,33 +222,29 @@ public class pacman {
         }
     }
 
+    /**
+     * Updates the remaining lives of the pacman.
+     * @param ghostsX Array of X positions of the ghosts
+     * @param ghostsY Array of Y positions of the ghosts
+     * @param ghostNum Number of remaining ghosts
+     * @return  If the pacman is still alive, false means not dead
+     */
 
-
-    boolean updateLives(int[] ghostsX, int[] ghostsY, int ghostNum)
-    {
-        for(int i =0; i < ghostNum; i++)
-        {
-            if((x/15) == (ghostsX[i]/15) && (y/15) == (ghostsY[i]/15))
-            {
+    boolean updateLives(int[] ghostsX, int[] ghostsY, int ghostNum) {
+        for (int i =0; i < ghostNum; i++) {
+            if ((x/15) == (ghostsX[i]/15) && (y/15) == (ghostsY[i]/15)) {
                 lives--;
                 return false;
             }
-
         }
         return true;
     }
 
-    //checks if the playerLost
-    boolean lossCondition()
-    {
-        if(lives<=0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+    /**
+     * Check if the game is lost
+     * @return True if game is lost
+     */
+    boolean lossCondition() {
+        return lives <= 0;
     }
-
 }

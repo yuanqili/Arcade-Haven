@@ -1,3 +1,5 @@
+package networking;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,9 +15,9 @@ import java.util.Date;
  *
  * <pre>
  * {@code
- * SBMessage msg = new SBMessage()
- *         .setType(Type.message)
- *         .setAction(Action.send)
+ * networking.SBMessage msg = new networking.SBMessage()
+ *         .setType(networking.Type.message)
+ *         .setAction(networking.Action.send)
  *         .setSequence(sequence++)
  *         .setSender("Alice")
  *         .setReceiver("Bob")
@@ -55,25 +57,25 @@ import java.util.Date;
 public class SBMessage implements Serializable {
 
     /** Message type. */
-    Type type;
+    public Type type;
 
     /** Message action, associated to its type. */
-    Action action;
+    public Action action;
 
     /** Time this instance initialized. */
-    Date timestamp = new Date();
+    public Date timestamp = new Date();
 
     /** Sequence number. Invalid if smaller than 0. */
-    int sequence = -1;
+    public int sequence = -1;
 
     /** Sender username, if any. */
-    String sender;
+    public String sender;
 
     /** Recipient username, if any. */
-    String receiver;
+    public String receiver;
 
     /** Message body. */
-    String body;
+    public String body;
 
     /**
      * General purpose flag. You can use it to indicate something that is
@@ -153,7 +155,7 @@ public class SBMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "SBMessage{" +
+        return "networking.SBMessage{" +
                 "type=" + type +
                 ", action=" + action +
                 ", timestamp=" + timestamp +

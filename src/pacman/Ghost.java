@@ -18,11 +18,9 @@ public class Ghost {
     int height = 400;
     int[][] array = {};
     BufferedImage ghostImage;
-    String file_name;
 
-    public Ghost(GridReadCreate grc, int x_cor, int y_cor, String file) {
-        file_name = file;
-        loadImages();
+    public Ghost(GridReadCreate grc, int x_cor, int y_cor, BufferedImage image) {
+        ghostImage = image;
         int xsize = grc.arr.length;
         int ysize = grc.arr[0].length;
         x = x_cor;
@@ -36,15 +34,6 @@ public class Ghost {
 
     void prt(String s) {
         System.out.print(s);
-    }
-
-    public void loadImages() {
-        try {
-            ghostImage = ImageIO.read(new File(file_name));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private int getDirection() {

@@ -10,7 +10,10 @@ import javax.swing.*;
 public class GameEngine extends JPanel implements ActionListener
 {
     private JFrame frame;
-    int delay=10; //controls the speed
+
+    /** controls the speed. */
+    int delay=10;
+
     boolean running = true;
     int width =450; //sets the width of the canvas
     int height = 490; // sets height of the canvas
@@ -21,6 +24,7 @@ public class GameEngine extends JPanel implements ActionListener
     boolean start = false; //a variable denoting whether or not the game began
     boolean alive = false; //checks if pacman is alive
     int lives = 3;
+    String [] filenames = {"res/images/ghost_r.png", "res/images/ghost_o.png", "res/images/ghost_p.png", "res/images/ghost_b.png"};
 
     //The font to be used
     private static Font font = new Font("Times New Roman", Font.BOLD, 14);
@@ -31,13 +35,15 @@ public class GameEngine extends JPanel implements ActionListener
     GridReadCreate grid = new GridReadCreate();
     Pacman pac;
     Ghost gho;
-    Ghost gho2;
-    Ghost gho3;
-    Ghost gho4;
+    //Ghost gho2;
+    //Ghost gho3;
+    //Ghost gho4;
 
     int ghostNum = 4; //number of ghosts
     int[] ghostsX = new int[4]; //x position of ghosts
     int[] ghostsY = new int[4]; //y position of ghosts
+
+    ImageLoader imgLdr;
 
     public static void main(String[] args) {
         GameEngine game = new GameEngine();
@@ -51,9 +57,10 @@ public class GameEngine extends JPanel implements ActionListener
         draw(g);
     }
 
-    void setUp()
+    public void setUp()
     {
         frameSetUp();
+        imgLdr = new ImageLoader(filenames);
         characterSetUp();
     }
 
@@ -72,14 +79,14 @@ public class GameEngine extends JPanel implements ActionListener
     void characterSetUp() {
         alive = true;
         start = false;
-        pac = new Pacman(grid, lives);
-        gho = new Ghost(grid,  300,  30, "res/images/ghost_r.png");
-        gho2 = new Ghost(grid,  30, 210, "res/images/ghost_o.png");
-        gho3 = new Ghost(grid, 120, 390, "res/images/ghost_p.png");
-        gho4 = new Ghost(grid, 360, 240, "res/images/ghost_b.png");
+        pac = new Pacman(grid, lives, imgLdr.pacmanL, imgLdr.pacmanU, imgLdr.pacmanR, imgLdr.pacmanD);
+        gho = new Ghost(grid,  300,  30, imgLdr.ghostImages[0]);
+        //gho2 = new Ghost(grid,  30, 210, imgLdr.ghostImages[1]);
+        //gho3 = new Ghost(grid, 120, 390, imgLdr.ghostImages[2]);
+        //gho4 = new Ghost(grid, 360, 240, imgLdr.ghostImages[3]);
     }
 
-    void run() {
+    public void run() {
         //setUp();
         while(running) //checks if the game is stopped yet
         {
@@ -95,12 +102,12 @@ public class GameEngine extends JPanel implements ActionListener
                 }
                 ghostsX[0] = gho.x;
                 ghostsY[0] = gho.y;
-                ghostsX[1] = gho2.x;
-                ghostsY[1] = gho2.y;
-                ghostsX[2] = gho3.x;
-                ghostsY[2] = gho3.y;
-                ghostsX[3] = gho4.x;
-                ghostsY[3] = gho4.y;
+//                ghostsX[1] = gho2.x;
+//                ghostsY[1] = gho2.y;
+//                ghostsX[2] = gho3.x;
+//                ghostsY[2] = gho3.y;
+//                ghostsX[3] = gho4.x;
+//                ghostsY[3] = gho4.y;
             }
             if(!alive && lives > 1)
             {
@@ -130,9 +137,9 @@ public class GameEngine extends JPanel implements ActionListener
     void update() {
         alive = pac.updateCharacter(ghostsX, ghostsY, ghostNum);
         gho.updateCharacter();
-        gho2.updateCharacter();
-        gho3.updateCharacter();
-        gho4.updateCharacter();
+//        gho2.updateCharacter();
+//        gho3.updateCharacter();
+//        gho4.updateCharacter();
         grid.update(pac.x, pac.y);
         frameCount++;
         state = (frameCount/animationRate) % 4;
@@ -144,9 +151,9 @@ public class GameEngine extends JPanel implements ActionListener
         grid.printToScreen(g, font, fontColor);
         pac.drawPac(g2d, state);
         gho.drawGhost(g2d);
-        gho2.drawGhost(g2d);
-        gho3.drawGhost(g2d);
-        gho4.drawGhost(g2d);
+//        gho2.drawGhost(g2d);
+//        gho3.drawGhost(g2d);
+//        gho4.drawGhost(g2d);
         String l = "Lives: " + lives;
         g.drawString(l, 360, 20);
         if(grid.winCondition())

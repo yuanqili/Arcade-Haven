@@ -16,22 +16,22 @@ public class Pacman {
     int step =1;
     int width= 800;
     int height = 400;
+    int[][] array;
+    int lives = 3; //number of lives you have
     private BufferedImage[] pacmanL = new BufferedImage[4];
     private BufferedImage[] pacmanR = new BufferedImage[4];
     private BufferedImage[] pacmanD = new BufferedImage[4];
     private BufferedImage[] pacmanU = new BufferedImage[4];
-    int[][] array;
-    int lives = 3; //number of lives you have
 
     void prt(String s){
         System.out.print(s);
     }
 
-    public Pacman(GridReadCreate grc, int numLives) {
+    public Pacman(GridReadCreate grc, int numLives, BufferedImage[] L, BufferedImage[] U, BufferedImage[] R, BufferedImage[] D) {
+        pacmanL = L; pacmanD = D; pacmanR = R; pacmanU = U;
         direction = KeyEvent.VK_RIGHT;
         po_direction = KeyEvent.VK_RIGHT;
         ctn_direction = KeyEvent.VK_RIGHT;
-        loadImages();
         int xsize = grc.arr.length; int ysize = grc.arr[0].length;
         array = new int [xsize][ysize];
 
@@ -42,83 +42,7 @@ public class Pacman {
         }
         lives = numLives;
     }
-    public void loadImages() {
-        /*File here = new File(".");
-        try {
-            System.out.println(here.getCanonicalPath());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        */
-        try {
-            pacmanL[0] = ImageIO.read(new File("res/images/left1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanL[1] = ImageIO.read(new File("res/images/left2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }try {
-            pacmanL[2] = ImageIO.read(new File("res/images/left3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanR[0] = ImageIO.read(new File("res/images/right1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanR[1] = ImageIO.read(new File("res/images/right2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanR[2] = ImageIO.read(new File("res/images/right3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanD[0] = ImageIO.read(new File("res/images/down1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanD[1] = ImageIO.read(new File("res/images/down2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanD[2] = ImageIO.read(new File("res/images/down3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanU[0] = ImageIO.read(new File("res/images/up1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanU[1] = ImageIO.read(new File("res/images/up2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanU[2] = ImageIO.read(new File("res/images/up3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanL[3] = ImageIO.read(new File("res/images/pacman.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        pacmanR[3] = pacmanL[3];
-        pacmanD[3] = pacmanL[3];
-        pacmanU[3] = pacmanL[3];
-    }
+
 
     public boolean updateCharacter(int[] ghostPosX, int[] ghostPosY, int ghostNum)
     {

@@ -1,3 +1,5 @@
+package gui;
+
 import networking.SBClient;
 import networking.SBMessage;
 

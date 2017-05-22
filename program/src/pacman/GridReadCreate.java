@@ -19,7 +19,7 @@ import java.util.List;
 public class GridReadCreate extends JPanel {
 
     /** Name of the file where grid data is stored*/
-    final static String FILE_NAME = "res/grid/TestData.txt";
+    final static String FILE_NAME = "program/res/grid/TestData.txt";
 
     /** Charset specification for file reading*/
     final static Charset ENCODE = StandardCharsets.UTF_8;
@@ -56,7 +56,7 @@ public class GridReadCreate extends JPanel {
      * @return  the image corresponding to the supplied integer
      */
     static Image getImage(int input) {
-        String str = "res/grid/image" + input + ".png";
+        String str = "program/res/grid/image" + input + ".png";
         ImageIcon ii = new ImageIcon(str);
         Image im = ii.getImage();
         return im;

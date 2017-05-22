@@ -57,66 +57,66 @@ public class ImageLoader {
         }
         */
         try {
-            pacmanL[0] = ImageIO.read(new File("res/images/left1.png"));
+            pacmanL[0] = ImageIO.read(new File("program/res/images/left1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanL[1] = ImageIO.read(new File("res/images/left2.png"));
+            pacmanL[1] = ImageIO.read(new File("program/res/images/left2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }try {
-            pacmanL[2] = ImageIO.read(new File("res/images/left3.png"));
+            pacmanL[2] = ImageIO.read(new File("program/res/images/left3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanR[0] = ImageIO.read(new File("res/images/right1.png"));
+            pacmanR[0] = ImageIO.read(new File("program/res/images/right1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanR[1] = ImageIO.read(new File("res/images/right2.png"));
+            pacmanR[1] = ImageIO.read(new File("program/res/images/right2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanR[2] = ImageIO.read(new File("res/images/right3.png"));
+            pacmanR[2] = ImageIO.read(new File("program/res/images/right3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanD[0] = ImageIO.read(new File("res/images/down1.png"));
+            pacmanD[0] = ImageIO.read(new File("program/res/images/down1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanD[1] = ImageIO.read(new File("res/images/down2.png"));
+            pacmanD[1] = ImageIO.read(new File("program/res/images/down2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanD[2] = ImageIO.read(new File("res/images/down3.png"));
+            pacmanD[2] = ImageIO.read(new File("program/res/images/down3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanU[0] = ImageIO.read(new File("res/images/up1.png"));
+            pacmanU[0] = ImageIO.read(new File("program/res/images/up1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanU[1] = ImageIO.read(new File("res/images/up2.png"));
+            pacmanU[1] = ImageIO.read(new File("program/res/images/up2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanU[2] = ImageIO.read(new File("res/images/up3.png"));
+            pacmanU[2] = ImageIO.read(new File("program/res/images/up3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            pacmanL[3] = ImageIO.read(new File("res/images/pacman.png"));
+            pacmanL[3] = ImageIO.read(new File("program/res/images/pacman.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

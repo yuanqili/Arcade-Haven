@@ -232,7 +232,7 @@ public class Pacman {
 
     boolean updateLives(int[] ghostsX, int[] ghostsY, int ghostNum) {
         for (int i =0; i < ghostNum; i++) {
-            if ((x/15) == (ghostsX[i]/15) && (y/15) == (ghostsY[i]/15)) {
+            if ((x) <= (ghostsX[i]+1) && (x) >= (ghostsX[i]-1) && (y) <= (ghostsY[i]+1)&& (y) >= (ghostsY[i]-1)) {
                 lives--;
                 return false;
             }

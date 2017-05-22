@@ -44,9 +44,11 @@ public class GameEngine extends JPanel implements ActionListener
     
     /** Denotes the number of lives the pacman character has. */
     int lives = 3;
+
+    boolean reset = false;
     
     /** Contains the filenames for the ghost images. */
-    String [] filenames = {"res/images/ghost_r.png", "res/images/ghost_o.png", "res/images/ghost_p.png", "res/images/ghost_b.png"};
+    String [] filenames = {"program/res/images/ghost_r.png", "program/res/images/ghost_o.png", "program/res/images/ghost_p.png", "program/res/images/ghost_b.png"};
 
     /** The font to be used for the in game text.*/
     private static Font font = new Font("Times New Roman", Font.BOLD, 14);
@@ -120,6 +122,7 @@ public class GameEngine extends JPanel implements ActionListener
     void characterSetUp() {
         alive = true;
         start = false;
+        reset = false;
         pac = new Pacman(grid, lives, imgLdr.pacmanL, imgLdr.pacmanU, imgLdr.pacmanR, imgLdr.pacmanD);
         gho = new Ghost(grid,  300,  30, imgLdr.ghostImages[0]);
         gho2 = new Ghost(grid,  30, 210, imgLdr.ghostImages[1]);
@@ -153,7 +156,18 @@ public class GameEngine extends JPanel implements ActionListener
             if(!alive && lives > 1)
             {
                 lives--;
+                ghostsX = new int[]{300, 30, 120, 360};
+                ghostsY = new int[]{30, 210, 390, 240};
                 characterSetUp();
+                reset = false;
+            }
+           else if (reset && pac.lossCondition()){
+                lives = 3;
+                ghostsX = new int[]{300, 30, 120, 360};
+                ghostsY = new int[]{30, 210, 390, 240};
+                characterSetUp();
+                grid = new GridReadCreate();
+                grid.score = 0;
             }
             revalidate();
             repaint();
@@ -167,6 +181,11 @@ public class GameEngine extends JPanel implements ActionListener
      *  @param g Graphics object that contains a method for drawing strings. */
     private void winScreen(Graphics g)
     {
+        g.setColor(new Color(220,200,25));
+        g.fillRect(50-3, 450 / 2 - 30-3, 450 - 94, 56);
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(50, 450 / 2 - 30, 450 - 100, 50);
+        g.setColor(new Color(220,200,25));
         g.drawString("YOU WON!", 190, 220);
     }
     
@@ -174,17 +193,44 @@ public class GameEngine extends JPanel implements ActionListener
      *  @param g Graphics object that contains a method for drawing strings. */
     private void lossScreen(Graphics g)
     {
+        g.setColor(new Color(220,200,25));
+        g.fillRect(50-3, 450 / 2 - 30-3, 450 - 94, 56+30);
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(50, 450 / 2 - 30, 450 - 100, 50+30);
+        g.setColor(new Color(220,200,25));
         g.drawString("YOU LOST!", 190, 220);
+        g.drawString("PRESS SPACE TO CONTINUE", 100, 250);
     }
     
     /** Displays the pause screen.
      *  @param g Graphics object that contains a method for drawing strings. */
-    private void pauseScreen(Graphics g) { g.drawString("PAUSE", 190, 220); }
+    private void pauseScreen(Graphics g) {
+        g.setColor(new Color(220,200,25));
+        g.fillRect(50-3, 450 / 2 - 30-3, 450 - 94, 56+30);
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(50, 450 / 2 - 30, 450 - 100, 50+30);
+        g.setColor(new Color(220,200,25));
+        g.drawString("PAUSE", 190, 220);
+        g.drawString("PRESS ARROW KEYS TO UNPAUSE", 100, 250);}
     
     /** Displays the start screen.
      *  @param g Graphics object that contains a method for drawing strings. */
-    private void startScreen(Graphics g) { g.drawString("PRESS SPACE TO START", 150, 220); }
+    private void startScreen(Graphics g) {
+        g.setColor(new Color(220,200,25));
+        g.fillRect(50-3, 450 / 2 - 30-3, 450 - 94, 56);
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(50, 450 / 2 - 30, 450 - 100, 50);
+        g.setColor(new Color(220,200,25));
+        g.drawString("PRESS SPACE TO START", 150, 227);}
 
+    private void resetScreen(Graphics g) {
+        g.setColor(new Color(220,200,25));
+        g.fillRect(50-3, 450 / 2 - 30-3, 450 - 94, 56+30);
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(50, 450 / 2 - 30, 450 - 100, 50+30);
+        g.setColor(new Color(220,200,25));
+        g.drawString("YOU LOST!", 190, 220);
+        g.drawString("PRESS R TO RESTART GAME", 130, 250);}
     /** Updates all the characters as well as the grid. Also updates whether or not Pacman as well as the state variable, then        *  increments the frameCount. */
     void update() {
         alive = pac.updateCharacter(ghostsX, ghostsY, ghostNum);
@@ -212,12 +258,14 @@ public class GameEngine extends JPanel implements ActionListener
         g.drawString(l, 360, 20);
         if(grid.winCondition())
             winScreen(g);
-        if(pac.lossCondition())
-            lossScreen(g);
+        if(pac.lossCondition()) {
+            resetScreen(g);
+        }
         if(pause)
             pauseScreen(g);
-        if(!start)
+        if(!start){
             startScreen(g);
+        }
     }
 
     /** A class which includes functions to listen to the key presses.*/
@@ -251,6 +299,9 @@ public class GameEngine extends JPanel implements ActionListener
                         break;
                     case KeyEvent.VK_P:
                         pause = true;
+                        break;
+                    case KeyEvent.VK_R:
+                        reset = true;
                         break;
                     case KeyEvent.VK_SPACE:
                         start = true;

@@ -75,6 +75,10 @@ public class SBClient {
         return schannel.isConnected();
     }
 
+    public SocketChannel getSchannel() {
+        return schannel;
+    }
+
     public ObjectInputStream getIn() {
         return in;
     }

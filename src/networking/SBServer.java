@@ -234,8 +234,8 @@ public class SBServer {
         @Override
         public void run() {
             try {
-                in = new ObjectInputStream(socket.getInputStream());
                 out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
 
                 while (true) {
                     SBMessage message = (SBMessage)in.readObject();

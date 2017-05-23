@@ -167,11 +167,3 @@ public class SBMessage implements Serializable {
                 '}';
     }
 }
-
-enum Type {
-    message, control, info
-}
-
-enum Action {
-    login, signup, bye, userlist, send, recv
-}

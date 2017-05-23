@@ -6,9 +6,15 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * The class of ImageLoader deals with reading images that represent the graphics of pacman and ghosts
+ * The class of ImageLoader deals with reading images that represent the
+ * graphics of pacman and ghosts
  */
 public class ImageLoader {
+
+    /**
+     * Name of the root path for image data.
+     */
+    private final static String PATH = "res/images/";
 
     /**
      * Left facing pacman image.
@@ -36,106 +42,50 @@ public class ImageLoader {
     public BufferedImage[] ghostImages = new BufferedImage[4];
 
     /**
-     *  Loads the images of pacman and ghosts.
-     * @param fileNames FileNames stores file names of different ghost images
+     * Loads the images of pacman and ghosts.
      */
-    public ImageLoader(String [] fileNames){
-        pacmanLoadImages();
-        ghostLoadImages(fileNames);
+    public ImageLoader() {
+        loadPacmanImages();
+        loadGhostImages();
     }
 
     /**
-     * Loads the image of the pacman
+     * Loads the image of the pacman.
      */
-    public void pacmanLoadImages() {
-        /*File here = new File(".");
+    private void loadPacmanImages() {
         try {
-            System.out.println(here.getCanonicalPath());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        */
-        try {
-            pacmanL[0] = ImageIO.read(new File("program/res/images/left1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanL[1] = ImageIO.read(new File("program/res/images/left2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }try {
-            pacmanL[2] = ImageIO.read(new File("program/res/images/left3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanR[0] = ImageIO.read(new File("program/res/images/right1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanR[1] = ImageIO.read(new File("program/res/images/right2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanR[2] = ImageIO.read(new File("program/res/images/right3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanD[0] = ImageIO.read(new File("program/res/images/down1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanD[1] = ImageIO.read(new File("program/res/images/down2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanD[2] = ImageIO.read(new File("program/res/images/down3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanU[0] = ImageIO.read(new File("program/res/images/up1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanU[1] = ImageIO.read(new File("program/res/images/up2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanU[2] = ImageIO.read(new File("program/res/images/up3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            pacmanL[3] = ImageIO.read(new File("program/res/images/pacman.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        pacmanR[3] = pacmanL[3];
-        pacmanD[3] = pacmanL[3];
-        pacmanU[3] = pacmanL[3];
-    }
-
-    /**
-     * Loads the images of the ghosts
-     */
-    public void ghostLoadImages(String [] fileNames) {
-        try {
-            for (int i=0; i<fileNames.length; i++) {
-                ghostImages[i] = ImageIO.read(new File(fileNames[i]));
-            }
+            pacmanL[0] = ImageIO.read(new File(PATH + "left1.png"));
+            pacmanL[1] = ImageIO.read(new File(PATH + "left2.png"));
+            pacmanL[2] = ImageIO.read(new File(PATH + "left3.png"));
+            pacmanR[0] = ImageIO.read(new File(PATH + "right1.png"));
+            pacmanR[1] = ImageIO.read(new File(PATH + "right2.png"));
+            pacmanR[2] = ImageIO.read(new File(PATH + "right3.png"));
+            pacmanD[0] = ImageIO.read(new File(PATH + "down1.png"));
+            pacmanD[1] = ImageIO.read(new File(PATH + "down2.png"));
+            pacmanD[2] = ImageIO.read(new File(PATH + "down3.png"));
+            pacmanU[0] = ImageIO.read(new File(PATH + "up1.png"));
+            pacmanU[1] = ImageIO.read(new File(PATH + "up2.png"));
+            pacmanU[2] = ImageIO.read(new File(PATH + "up3.png"));
+            pacmanL[3] = ImageIO.read(new File(PATH + "pacman.png"));
+            pacmanR[3] = pacmanL[3];
+            pacmanD[3] = pacmanL[3];
+            pacmanU[3] = pacmanL[3];
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Loads the images of the ghosts.
+     */
+    private void loadGhostImages() {
+        try {
+            ghostImages[0] = ImageIO.read(new File(PATH + "ghost_r.png"));
+            ghostImages[1] = ImageIO.read(new File(PATH + "ghost_o.png"));
+            ghostImages[2] = ImageIO.read(new File(PATH + "ghost_p.png"));
+            ghostImages[3] = ImageIO.read(new File(PATH + "ghost_b.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

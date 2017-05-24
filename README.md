@@ -1,6 +1,6 @@
 # Arcade Haven
 
-![img](https://raw.githubusercontent.com/yuanqili/Arcade-Haven/May20Meeting/program/web/img/logo.png)
+![img](https://raw.githubusercontent.com/yuanqili/CS48-S17-UCSB/master/resources/logo.png)
 
 ## Server
 

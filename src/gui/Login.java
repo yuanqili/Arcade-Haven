@@ -1,15 +1,15 @@
 package gui;
 
-import networking.SBClient;
-import networking.SBMessage;
 import pacman.GameEngine;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
 
-public class Login implements ActionListener {
+public class Login {
 
     public JFrame frame = new JFrame();
     private JPanel main;
@@ -19,11 +19,11 @@ public class Login implements ActionListener {
     private JButton signupButton;
     private JLabel infoLabel;
 
+    private Socket socket;
+    private PrintWriter out;
+    private Scanner in;
     public String username;
     public String password;
-
-    public SBClient client;
-
     public String host;
     public int port;
 
@@ -32,11 +32,13 @@ public class Login implements ActionListener {
         this.port = port;
 
         try {
-            client = new SBClient(this.host, this.port);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
+            socket = new Socket(host, port);
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new Scanner(socket.getInputStream());
+            out.println("info init");
+            in.nextLine();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         frame.add(main);
@@ -45,75 +47,39 @@ public class Login implements ActionListener {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        loginButton.addActionListener(this);
+        loginButton.addActionListener(e -> {
+            username = usernameField.getText();
+            password = new String(passwordField.getPassword());
+            out.println("login " + username + " " + password);
+
+            String response = in.nextLine();
+            System.out.println(response);
+            boolean loginStatus = response.split(" ")[1].equals("succeed");
+            infoLabel.setText(loginStatus ? "Login succeeds" : "Login fails");
+            if (!loginStatus)
+                return;
+
+            frame.dispose();
+            EventQueue.invokeLater(() -> new ChatTest(socket, in, out, username).start());
+            new Thread(() -> {
+                GameEngine game = new GameEngine();
+                game.setup();
+                game.run();
+            }).start();
+        });
 
         signupButton.addActionListener(e -> {
             username = usernameField.getText();
             password = new String(passwordField.getPassword());
-
-            SBMessage signupInfo, signupResponse;
-            boolean signupStatus = false;
-
-            try {
-                signupInfo = client.signup(username, password);
-                do {
-                    signupResponse = (SBMessage) client.getIn().readObject();
-                    signupStatus = signupResponse.getFlag();
-                } while (signupResponse.getSequence() != signupResponse.getSequence());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            } catch (ClassNotFoundException e1) {
-                e1.printStackTrace();
-            }
-
-            if (signupStatus)
-                infoLabel.setText("Signup succeeds");
-            else
-                infoLabel.setText("Signup fails");
+            out.println("signup " + username + password);
+            String response = in.next();
+            System.out.println(response);
+            boolean signupStatus = response.split(" ")[1].equals("succeed");
+            infoLabel.setText(signupStatus ? "Signup succeeds" : "Signup fails");
         });
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        username = usernameField.getText();
-        password = new String(passwordField.getPassword());
-
-        SBMessage loginInfo, loginResponse;
-        boolean loginStatus = false;
-
-        try {
-            loginInfo = client.login(username, password);
-            do {
-                loginResponse = (SBMessage) client.getIn().readObject();
-                loginStatus = loginResponse.getFlag();
-            } while (loginResponse.getSequence() != loginInfo.getSequence());
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
-        }
-
-        if (!loginStatus)
-            return;
-
-        frame.dispose();
-
-        new Thread(() -> {
-            JFrame chat = new JFrame("Chat Box");
-            chat.setContentPane(new ChatBox(client).panel);
-            chat.setSize(800, 400);
-            chat.setVisible(true);
-            chat.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        }).start();
-
-        new Thread(() -> {
-            GameEngine game = new GameEngine();
-            game.setUp();
-            game.run();
-        }).start();
-    }
-
     public static void main(String[] args) {
-        Login login =  new Login("csil-08.cs.ucsb.edu", 23333);
+//        Login login =  new Login("csil-08.cs.ucsb.edu", 23333);
     }
 }

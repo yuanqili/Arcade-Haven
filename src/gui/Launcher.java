@@ -26,7 +26,7 @@ public class Launcher implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         frame.setVisible(false);
         GameEngine game = new GameEngine();
-        game.setUp();
+        game.setup();
         game.run();
     }
 

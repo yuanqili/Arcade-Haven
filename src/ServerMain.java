@@ -1,4 +1,4 @@
-import networking.SBServer;
+import networking.SBServer2;
 
 public class ServerMain {
     public static void main(String[] args) {
@@ -12,7 +12,7 @@ public class ServerMain {
 //            return;
         }
 
-        SBServer server = new SBServer(port);
+        SBServer2 server = new SBServer2(port);
         server.run();
     }
 }

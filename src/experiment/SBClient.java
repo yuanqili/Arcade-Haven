@@ -1,4 +1,7 @@
-package networking;
+package experiment;
+
+import networking.Action;
+import networking.Type;
 
 import java.io.*;
 import java.net.InetSocketAddress;

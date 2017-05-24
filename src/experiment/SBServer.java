@@ -1,4 +1,8 @@
-package networking;
+package experiment;
+
+import networking.Action;
+import networking.DBManage;
+import networking.Type;
 
 import java.io.*;
 import java.net.ServerSocket;

@@ -1,4 +1,7 @@
-package networking;
+package experiment;
+
+import networking.Action;
+import networking.Type;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,7 +18,7 @@ import java.util.Date;
  *
  * <pre>
  * {@code
- * networking.SBMessage msg = new networking.SBMessage()
+ * experiment.SBMessage msg = new experiment.SBMessage()
  *         .setType(networking.Type.message)
  *         .setAction(networking.Action.send)
  *         .setSequence(sequence++)
@@ -155,7 +158,7 @@ public class SBMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "networking.SBMessage{" +
+        return "experiment.SBMessage{" +
                 "type=" + type +
                 ", action=" + action +
                 ", timestamp=" + timestamp +

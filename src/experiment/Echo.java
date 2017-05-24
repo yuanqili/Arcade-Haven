@@ -15,8 +15,10 @@ public class Echo implements Runnable {
 
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 12345;
+
     private volatile PrintWriter out;
     private Scanner in;
+
     private Thread thread;
 
     private Kind kind;

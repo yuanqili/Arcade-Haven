@@ -126,6 +126,21 @@ public class GameEngine extends JPanel implements ActionListener {
     ImageLoader imgLdr= new ImageLoader();
 
     /**
+     * An instance of Item that keeps track of the currently active Item.
+     */
+    Item activeItem = null;
+
+    /**
+     * Keeps track of when the active item was activated
+     */
+    long itemStart;
+
+    /**
+     * A decrementing integer that keeps track of how much time left before the player loses
+     */
+    int timeLimit = 90;
+
+    /**
      * Overrides JPanel's paintComponent to draw the characters and the grid
      * onto the frame.
      *
@@ -177,6 +192,7 @@ public class GameEngine extends JPanel implements ActionListener {
                         break;
                     case KeyEvent.VK_R:
                         reset = true;
+                        frameCount=0;
                         break;
                     case KeyEvent.VK_SPACE:
                         start = true;
@@ -212,7 +228,7 @@ public class GameEngine extends JPanel implements ActionListener {
      */
     public void run() {
         while (running) {
-            while (!grid.winCondition() && !pac.lossCondition()
+            while (!grid.winCondition() && !pac.lossCondition() && (timeLimit - (frameCount/100)) > 0
                     && !pause && start && running && alive) {
                 update();
                 revalidate();
@@ -231,16 +247,20 @@ public class GameEngine extends JPanel implements ActionListener {
                 ghostsX[3] = gho4.x;
                 ghostsY[3] = gho4.y;
             }
-            if (!alive && lives > 1) {
+            if (!alive && lives > 1 && (timeLimit - (frameCount/100)) >0) {
                 lives--;
                 ghostsX = new int[]{300, 30, 120, 360};
                 ghostsY = new int[]{30, 210, 390, 240};
+                if(activeItem!=null)
+                    deactivateItem();
                 characterSetup();
                 reset = false;
-            } else if (reset && pac.lossCondition()) {
+            } else if (reset && (pac.lossCondition()|| (timeLimit - (frameCount/100)) <=0)) {
                 lives = 3;
                 ghostsX = new int[]{300, 30, 120, 360};
                 ghostsY = new int[]{30, 210, 390, 240};
+                if(activeItem!=null)
+                    deactivateItem();
                 characterSetup();
                 grid = new GridReadCreate();
                 grid.score = 0;
@@ -264,6 +284,9 @@ public class GameEngine extends JPanel implements ActionListener {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(50, 450 / 2 - 30, 450 - 100, 50);
         g.setColor(new Color(220, 200, 25));
+        //grid.score += (timeLimit - (frameCount/100)) * 10;
+        String s = "Score: " + grid.score;
+        g.drawString(s, 20, 20);
         g.drawString("YOU WON!", 190, 220);
     }
 
@@ -317,6 +340,8 @@ public class GameEngine extends JPanel implements ActionListener {
      * @param g Graphics object that contains a method for drawing strings.
      */
     private void resetScreen(Graphics g) {
+        if(activeItem!=null)
+            deactivateItem();
         g.setColor(new Color(220, 200, 25));
         g.fillRect(50 - 3, 450 / 2 - 30 - 3, 450 - 94, 56 + 30);
         g.setColor(new Color(0, 0, 0));
@@ -336,9 +361,33 @@ public class GameEngine extends JPanel implements ActionListener {
         gho2.updateCharacter();
         gho3.updateCharacter();
         gho4.updateCharacter();
-        grid.update(pac.x, pac.y);
+        Item itemType = grid.update(pac);
+        if(itemType != null)
+            activateItem(itemType);
         frameCount++;
         state = (frameCount / animationRate) % 4;
+        if(activeItem != null && (System.currentTimeMillis() - itemStart) >= activeItem.duration)
+            deactivateItem();
+    }
+
+    /**
+     * Invokes the deactivation method of the active item.
+     */
+    private void deactivateItem() {
+        activeItem.deactivate(grid, pac);
+        activeItem = null;
+    }
+
+    /**
+     * Invokes the activation method of an item and records the time the item was activated.
+     * @param itemType Denotes the type of item that should be activated.
+     */
+    private void activateItem(Item itemType) {
+        if(activeItem != null)
+            deactivateItem();
+        activeItem = itemType;
+        activeItem.activate(grid, pac);
+        itemStart = System.currentTimeMillis();
     }
 
     /**
@@ -363,10 +412,14 @@ public class GameEngine extends JPanel implements ActionListener {
         gho3.drawGhost(g2d);
         gho4.drawGhost(g2d);
         String l = "Lives: " + lives;
+        String l2 = "Time: " + (timeLimit - (frameCount/100));
+        String s = "Score: " + grid.score;
+        g.drawString(s, 20, 20);
         g.drawString(l, 360, 20);
+        g.drawString(l2, 180, 20);
         if (grid.winCondition())
             winScreen(g);
-        if (pac.lossCondition())
+        if (pac.lossCondition() || (timeLimit - (frameCount/100)) <=0)
             resetScreen(g);
         if (pause)
             pauseScreen(g);

@@ -366,7 +366,7 @@ public class GameEngine extends JPanel implements ActionListener {
             activateItem(itemType);
         frameCount++;
         state = (frameCount / animationRate) % 4;
-        if(activeItem != null && (System.currentTimeMillis() - itemStart) >= activeItem.duration)
+        if(activeItem != null && ((frameCount - itemStart)*10) >= activeItem.duration)
             deactivateItem();
     }
 
@@ -387,7 +387,7 @@ public class GameEngine extends JPanel implements ActionListener {
             deactivateItem();
         activeItem = itemType;
         activeItem.activate(grid, pac);
-        itemStart = System.currentTimeMillis();
+        itemStart = frameCount;
     }
 
     /**

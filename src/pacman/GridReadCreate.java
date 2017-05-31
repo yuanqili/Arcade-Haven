@@ -2,10 +2,7 @@ package pacman;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -50,9 +47,10 @@ public class GridReadCreate extends JPanel {
      */
     int totalDots = 111;
 
+
     /**
      * Default constructor for GridReadCreate objects. Reads and translates a
-     * file into the array.
+     * file into the array. Also creates an instance of a SpeedUp item.
      */
     GridReadCreate() {
         try {
@@ -124,24 +122,37 @@ public class GridReadCreate extends JPanel {
         }
         g.setFont(font);
         g.setColor(fontColor);
-        String s = "Score: " + score;
-        g.drawString(s, 20, 20);
     }
 
     /**
      * Uses the pacman position to redraw the board by replacing dots with blank
      * spaces when the pacman reaches that space.
      *
-     * @param pacPosX the pacman character's x-position
-     * @param pacPosY the pacman character's y-position
+     * @param pac the pacman character object.
      */
-    void update(int pacPosX, int pacPosY) {
-        int x = pacPosX / 30, y = pacPosY / 30;
+    Item update(Pacman pac) {
+        int x = pac.x / 30, y = pac.y / 30;
+        Item type = null;
+        switch (arr[y][x])
+        {
+            case -26:
+                type = new SpeedUp();
+                arr[y][x] = 0;
+                totalDots--;
+                break;
+
+            case -27:
+                type = new DoublePoints();
+                arr[y][x]=0;
+                totalDots--;
+                break;
+        }
         if (arr[y][x] == 1) {
             arr[y][x] = 0;
             score += pointWorth;
             totalDots--;
         }
+        return type;
     }
 
     /**

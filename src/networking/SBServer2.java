@@ -169,6 +169,14 @@ public class SBServer2 {
                     out.println("userlist " + sb.toString());
                     break;
 
+                case "score":
+                    out.println("score " + db.leaderboard());
+                    break;
+
+                case "updatescore":
+                    db.updateUserScore(token[1], Integer.parseInt(token[2]));
+                    break;
+
                 case "message":
                     receiver = token[1];
                     try {

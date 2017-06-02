@@ -91,6 +91,42 @@ public class DBManage {
         return false;
     }
 
+    public String leaderboard() {
+        if (conn == null)
+            this.connect();
+
+        StringBuilder scores = new StringBuilder();
+
+        try {
+            PreparedStatement query = conn.prepareStatement("SELECT username, score FROM g01.user;");
+            ResultSet rs = query.executeQuery();
+            while (rs.next())
+                scores.append(rs.getString(1)).append(" ").append(rs.getInt(2)).append(" ");
+        } catch (SQLException ex) {
+            SQLExceptionPrinter(ex);
+        }
+
+        return scores.toString();
+    }
+
+    public boolean updateUserScore(String username, int score) {
+        if (conn == null)
+            this.connect();
+
+        boolean res = false;
+
+        try {
+            PreparedStatement query = conn.prepareStatement("UPDATE g01.user SET score=? WHERE username=?");
+            query.setInt(1, score);
+            query.setString(2, username);
+            res = query.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
     /**
      * Disconnects from the database.
      */

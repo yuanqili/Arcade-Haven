@@ -21,6 +21,9 @@ public class ChatTest implements Runnable {
     private JList userlist;
     private JTextArea msgHist;
     private JScrollPane msgHistScroller;
+    private DefaultListModel<String> scores = new DefaultListModel<>();
+    private JList leaderboard;
+    private JButton leaderboardButton;
 
     // Connection
     private Socket socket;
@@ -44,6 +47,7 @@ public class ChatTest implements Runnable {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         userlist.setModel(users);
+        leaderboard.setModel(scores);
 
         msgSendButton.addActionListener(e -> {
             if (userlist.getSelectedValue() == null) return;
@@ -63,6 +67,14 @@ public class ChatTest implements Runnable {
         refreshButton.addActionListener(e -> {
             try {
                 out.println("userlist");
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        leaderboardButton.addActionListener(e -> {
+            try {
+                out.println("score");
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -108,6 +120,13 @@ public class ChatTest implements Runnable {
                 case "userlist":
                     users.removeAllElements();
                     Arrays.stream(tokens[1].split(" ")).forEach(users::addElement);
+                    break;
+                case "score":
+                    scores.removeAllElements();
+                    String[] userscore = tokens[1].split(" ");
+                    for (int i = 0; i < userscore.length - 1; i += 2)
+                        scores.addElement(userscore[i] + " " + userscore[i+1]);
+                    break;
             }
         });
     }

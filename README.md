@@ -30,10 +30,10 @@ You can also run the game calling `make default-game`, which runs game using
 the default arguments.
 
 You are allowed to register a new user in the start screen. Or you can use
-the following user.
+the following user. Here are some test users.
 
-- username: timcook
-- password: 123456
+- timcook 123456
+- amazon 123456
 
 ## Known issues
 

@@ -31,7 +31,7 @@ public class GameEngine extends JPanel implements ActionListener {
     /**
      * Sets the width of the canvas.
      */
-    int width = 450;
+    int width = 470;
 
     /**
      * Sets the height of the canvas.
@@ -207,8 +207,6 @@ public class GameEngine extends JPanel implements ActionListener {
      * Creates the frame, sets the title, size and close operation.
      */
     void frameSetup() {
-        timeLimit[0] = constTimeLimit;
-        firstGameOver = true;
         frame.setTitle("Pac-Man");
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
@@ -234,8 +232,8 @@ public class GameEngine extends JPanel implements ActionListener {
                         pause = true;
                         break;
                     case KeyEvent.VK_R:
-                        reset = true;
-                        frameCount = 0;
+                        if(pac.lossCondition() || (timeLimit[0]-(frameCount/100)) <=0)
+                            reset = true;
                         break;
                     case KeyEvent.VK_SPACE:
                         start = true;
@@ -302,6 +300,9 @@ public class GameEngine extends JPanel implements ActionListener {
                 reset = false;
             } else if (reset && (pac.lossCondition() || (timeLimit[0] - (frameCount / 100)) <= 0)) {
                 lives = 3;
+                timeLimit[0] = constTimeLimit;
+                firstGameOver = true;
+                frameCount = 0;
                 ghostsX = new int[]{300, 30, 120, 360};
                 ghostsY = new int[]{30, 210, 390, 240};
                 if (activeItem.peekFirst() != null)

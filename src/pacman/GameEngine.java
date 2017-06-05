@@ -400,7 +400,6 @@ public class GameEngine extends JPanel implements ActionListener {
      * Invokes the deactivation method of the active item.
      */
     private void deactivateItem(int index) {
-        System.out.print(index);
         activeItem.get(index).deactivate(grid, pac);
         activeItem.remove(index);
         itemStart.remove(index);

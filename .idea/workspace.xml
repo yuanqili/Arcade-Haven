@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a754256b-bf35-4db4-87c6-f55d1d566b88" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/pacman/TimeExtender.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Arcade-Haven/grid/image1_Big.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Arcade-Haven/pacman/DoublePoints.class" afterPath="$PROJECT_DIR$/out/production/Arcade-Haven/pacman/DoublePoints.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Arcade-Haven/pacman/GameEngine$1.class" afterPath="$PROJECT_DIR$/out/production/Arcade-Haven/pacman/GameEngine$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Arcade-Haven/pacman/GameEngine.class" afterPath="$PROJECT_DIR$/out/production/Arcade-Haven/pacman/GameEngine.class" />
@@ -13,14 +13,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Arcade-Haven/pacman/SpeedUp.class" afterPath="$PROJECT_DIR$/out/production/Arcade-Haven/pacman/SpeedUp.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Arcade-Haven/grid/TestData.txt" afterPath="$PROJECT_DIR$/out/production/Arcade-Haven/grid/TestData.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/grid/TestData.txt" afterPath="$PROJECT_DIR$/res/grid/TestData.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pacman/DoublePoints.java" afterPath="$PROJECT_DIR$/src/pacman/DoublePoints.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pacman/GameEngine.java" afterPath="$PROJECT_DIR$/src/pacman/GameEngine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pacman/Ghost.java" afterPath="$PROJECT_DIR$/src/pacman/Ghost.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pacman/GridReadCreate.java" afterPath="$PROJECT_DIR$/src/pacman/GridReadCreate.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pacman/Item.java" afterPath="$PROJECT_DIR$/src/pacman/Item.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pacman/Pacman.java" afterPath="$PROJECT_DIR$/src/pacman/Pacman.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pacman/SpeedUp.java" afterPath="$PROJECT_DIR$/src/pacman/SpeedUp.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -35,8 +28,8 @@
       <file leaf-file-name="GameEngine.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pacman/GameEngine.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="459" column="71" lean-forward="true" selection-start-line="459" selection-start-column="71" selection-end-line="459" selection-end-column="71" />
+            <state relative-caret-position="182">
+              <caret line="402" column="0" lean-forward="false" selection-start-line="402" selection-start-column="0" selection-end-line="402" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4857#5871#0" expanded="true" />
@@ -142,7 +135,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>drawstrin</find>
       <find>drawstri</find>
       <find>frameCount</find>
       <find>system</find>
@@ -172,6 +164,7 @@
       <find>winscre</find>
       <find>characterSetu</find>
       <find>first</find>
+      <find>system.out.print</find>
     </findStrings>
     <replaceStrings>
       <replace>res/images/</replace>
@@ -895,7 +888,7 @@
       <workItem from="1495562074515" duration="6031000" />
       <workItem from="1495573895848" duration="5617000" />
       <workItem from="1496101290752" duration="16034000" />
-      <workItem from="1496631023531" duration="10326000" />
+      <workItem from="1496631023531" duration="10645000" />
     </task>
     <task id="LOCAL-00001" summary="remove exception handler to support default args">
       <created>1495563562653</created>
@@ -946,11 +939,18 @@
       <option name="project" value="LOCAL" />
       <updated>1496131911902</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="June 4th changes">
+      <created>1496641569163</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1496641569163</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57089000" />
+    <option name="totallyTimeSpent" value="57408000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
@@ -1006,7 +1006,8 @@
     <MESSAGE value="put Action and Type in separate files" />
     <MESSAGE value="fix bug: cannot talk in gui" />
     <MESSAGE value="Added a timer, speedup item, and a double points powerup." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a timer, speedup item, and a double points powerup." />
+    <MESSAGE value="June 4th changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="June 4th changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1293,8 +1294,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pacman/GameEngine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="459" column="71" lean-forward="true" selection-start-line="459" selection-start-column="71" selection-end-line="459" selection-end-column="71" />
+        <state relative-caret-position="182">
+          <caret line="402" column="0" lean-forward="false" selection-start-line="402" selection-start-column="0" selection-end-line="402" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#4857#5871#0" expanded="true" />

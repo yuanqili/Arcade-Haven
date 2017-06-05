@@ -82,6 +82,7 @@ public class Ghost {
         int[] checkArr = {0, 0, 0, 0};
         int xx = x / 30, yy = y / 30;
         boolean leftedge = xx == 0, rightedge = xx == 14;
+        int possible_dirs = 0;
         switch (x) {
             case -29:
                 x = 449;
@@ -96,22 +97,41 @@ public class Ghost {
         }
 
         //handles right/left side wrapping
-        if (rightedge || array[(x + 30) / 30][yy] <= 1 && y % 30 == 0)
+        if (rightedge || array[(x + 30) / 30][yy] <= 1 && y % 30 == 0) {
+            possible_dirs++;
             checkArr[0]++;
-        if (array[xx][(y + 30) / 30] <= 1 && x % 30 == 0)
+        }
+        if (array[xx][(y + 30) / 30] <= 1 && x % 30 == 0){
+            possible_dirs++;
             checkArr[1]++;
-        if (leftedge || array[(x - 1) / 30][yy] <= 1 && y % 30 == 0)
+        }
+        if (leftedge || array[(x - 1) / 30][yy] <= 1 && y % 30 == 0){
+            possible_dirs++;
             checkArr[2]++;
-        if (array[xx][(y - 1) / 30] <= 1 && x % 30 == 0)
+        }
+        if (array[xx][(y - 1) / 30] <= 1 && x % 30 == 0){
+            possible_dirs++;
             checkArr[3]++;
+        }
 
-        // check is the index of one of the 1's in checkArr
         int check = 10;
-        while (check == 10) {
-            if (checkArr[direction] == 1)
-                check = direction;
-            else
-                direction = getDirection();
+        int test_dir = -1;
+        // check is the index of one of the 1's in checkArr
+        while (check == 10){
+            if(possible_dirs>2) {
+                test_dir = getDirection();
+                if ((checkArr[test_dir] == 1) && (test_dir != Math.abs(2-direction))) {
+                    check = test_dir;
+                }
+            }
+            else {
+                if (checkArr[direction] == 1){
+                    check = direction;
+                }
+                else {
+                    direction = getDirection();
+                }
+            }
         }
         switch (check) {
             case 0:

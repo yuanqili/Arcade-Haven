@@ -4,7 +4,7 @@ package pacman;
 public class DoublePoints extends Item {
 
     @Override
-    void activate(GridReadCreate grid, Pacman pac) {
+    void activate(GridReadCreate grid, Pacman pac, int[] timeLimit) {
         pointWorth = 50;
         duration = 10000;
         grid.pointWorth = grid.pointWorth *2;

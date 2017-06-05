@@ -141,8 +141,13 @@ public class GridReadCreate extends JPanel {
                 totalDots--;
                 break;
 
-            case -27:
+            case -29:
                 type = new DoublePoints();
+                arr[y][x]=0;
+                totalDots--;
+                break;
+            case -28:
+                type = new TimeExtender();
                 arr[y][x]=0;
                 totalDots--;
                 break;

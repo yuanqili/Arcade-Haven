@@ -1,5 +1,6 @@
 package networking;
 
+import javax.management.Query;
 import java.sql.*;
 
 /**
@@ -116,6 +117,20 @@ public class DBManage {
         boolean res = false;
 
         try {
+            // query old score and compare with new score
+            PreparedStatement oldScoreQuery = conn.prepareStatement("SELECT score FROM g01.user WHERE username=?");
+            oldScoreQuery.setString(1, username);
+            ResultSet oldScoreRS = oldScoreQuery.executeQuery();
+            int oldScore = 0;
+            if (oldScoreRS.next())
+                oldScore = oldScoreRS.getInt(1);
+            System.out.println("old score is " + oldScore);
+
+            // new score is too low, return
+            if (oldScore > score)
+                return false;
+
+            // update score if necessary (new score is greater to old score)
             PreparedStatement query = conn.prepareStatement("UPDATE g01.user SET score=? WHERE username=?");
             query.setInt(1, score);
             query.setString(2, username);

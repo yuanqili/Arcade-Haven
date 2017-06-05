@@ -62,7 +62,7 @@ public class Login {
             frame.dispose();
             EventQueue.invokeLater(() -> new ChatTest(socket, in, out, username).start());
             new Thread(() -> {
-                GameEngine game = new GameEngine();
+                GameEngine game = new GameEngine(out, username);
                 game.setup();
                 game.run();
             }).start();
@@ -71,8 +71,8 @@ public class Login {
         signupButton.addActionListener(e -> {
             username = usernameField.getText();
             password = new String(passwordField.getPassword());
-            out.println("signup " + username + password);
-            String response = in.next();
+            out.println("signup " + username + " " + password);
+            String response = in.nextLine();
             System.out.println(response);
             boolean signupStatus = response.split(" ")[1].equals("succeed");
             infoLabel.setText(signupStatus ? "Signup succeeds" : "Signup fails");

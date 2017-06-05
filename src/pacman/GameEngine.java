@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.PrintWriter;
 import java.util.LinkedList;
-import java.util.Stack;
 
 /**
  * The class GameEngine is used to run the main game loop, set up the frame, and
@@ -125,7 +125,7 @@ public class GameEngine extends JPanel implements ActionListener {
      * An instance of ImageLoader which is in charge of loading the images for
      * all the characters.
      **/
-    ImageLoader imgLdr= new ImageLoader();
+    ImageLoader imgLdr = new ImageLoader();
 
     /**
      * A linked list of Items that keeps track of the currently active Items.
@@ -133,9 +133,10 @@ public class GameEngine extends JPanel implements ActionListener {
     LinkedList<Item> activeItem = new LinkedList<>();
 
     /**
-     * A class that only includes a long type value. It is used to construct a linked list.
+     * A class that only includes a long type value. It is used to construct a
+     * linked list.
      */
-    class Time{
+    class Time {
         private long value = 0;
     }
 
@@ -145,25 +146,46 @@ public class GameEngine extends JPanel implements ActionListener {
     LinkedList<Time> itemStart = new LinkedList();
 
     /**
-     * A decrementing integer that keeps track of how much time left before the player loses
+     * A decrementing integer that keeps track of how much time left before the
+     * player loses.
      */
     int[] timeLimit = {60};
 
     /**
-     * A constant time limit that is used to reset the timer when the player resets the game
+     * A constant time limit that is used to reset the timer when the player
+     * resets the game.
      */
     final int constTimeLimit = 60;
 
     /**
-     * This variable is changed to false once the bonus time score is added to the total score, to avoid infinitely incrementing the score.
+     * This variable is changed to false once the bonus time score is added to
+     * the total score, to avoid infinitely incrementing the score.
      */
     boolean firstGameOver = true;
+
+    /**
+     * This PrintWriter is used to write score to the server.
+     */
+    PrintWriter out;
+
+    /**
+     * This is palyer's username.
+     */
+    String username;
+
+    public GameEngine() {}
+
+    public GameEngine(PrintWriter out, String username) {
+        this.out = out;
+        this.username = username;
+    }
 
     /**
      * Overrides JPanel's paintComponent to draw the characters and the grid
      * onto the frame.
      *
-     * @param g Graphics object that needs to be passed to the paintComponent class of JPanel.
+     * @param g Graphics object that needs to be passed to the paintComponent
+     *          class of JPanel.
      */
     @Override
     public void paintComponent(Graphics g) {
@@ -213,7 +235,7 @@ public class GameEngine extends JPanel implements ActionListener {
                         break;
                     case KeyEvent.VK_R:
                         reset = true;
-                        frameCount=0;
+                        frameCount = 0;
                         break;
                     case KeyEvent.VK_SPACE:
                         start = true;
@@ -232,7 +254,7 @@ public class GameEngine extends JPanel implements ActionListener {
         alive = true;
         start = false;
         reset = false;
-        pac  = new Pacman(grid, lives, imgLdr.pacmanL, imgLdr.pacmanU, imgLdr.pacmanR, imgLdr.pacmanD);
+        pac = new Pacman(grid, lives, imgLdr.pacmanL, imgLdr.pacmanU, imgLdr.pacmanR, imgLdr.pacmanD);
         gho1 = new Ghost(grid, 300, 30, imgLdr.ghostImages[0]);
         gho2 = new Ghost(grid, 30, 210, imgLdr.ghostImages[1]);
         gho3 = new Ghost(grid, 120, 390, imgLdr.ghostImages[2]);
@@ -249,7 +271,8 @@ public class GameEngine extends JPanel implements ActionListener {
      */
     public void run() {
         while (running) {
-            while (!grid.winCondition() && !pac.lossCondition() && (timeLimit[0] - (frameCount/100)) > 0
+            while (!grid.winCondition() && !pac.lossCondition()
+                    && (timeLimit[0] - (frameCount / 100)) > 0
                     && !pause && start && running && alive) {
                 update();
                 revalidate();
@@ -268,20 +291,20 @@ public class GameEngine extends JPanel implements ActionListener {
                 ghostsX[3] = gho4.x;
                 ghostsY[3] = gho4.y;
             }
-            if (!alive && lives > 1 && (timeLimit[0] - (frameCount/100)) >0) {
+            if (!alive && lives > 1 && (timeLimit[0] - (frameCount / 100)) > 0) {
                 lives--;
                 ghostsX = new int[]{300, 30, 120, 360};
                 ghostsY = new int[]{30, 210, 390, 240};
-                if(activeItem.peekFirst()!=null) {
+                if (activeItem.peekFirst() != null) {
                     deactivateAllItems();
                 }
                 characterSetup();
                 reset = false;
-            } else if (reset && (pac.lossCondition()|| (timeLimit[0] - (frameCount/100)) <=0)) {
+            } else if (reset && (pac.lossCondition() || (timeLimit[0] - (frameCount / 100)) <= 0)) {
                 lives = 3;
                 ghostsX = new int[]{300, 30, 120, 360};
                 ghostsY = new int[]{30, 210, 390, 240};
-                if(activeItem.peekFirst()!=null)
+                if (activeItem.peekFirst() != null)
                     deactivateAllItems();
                 characterSetup();
                 grid = new GridReadCreate();
@@ -362,7 +385,7 @@ public class GameEngine extends JPanel implements ActionListener {
      * @param g Graphics object that contains a method for drawing strings.
      */
     private void resetScreen(Graphics g) {
-        if(activeItem.peekFirst()!=null)
+        if (activeItem.peekFirst() != null)
             deactivateAllItems();
         g.setColor(new Color(220, 200, 25));
         g.fillRect(50 - 3, 450 / 2 - 30 - 3, 450 - 94, 56 + 30);
@@ -384,11 +407,11 @@ public class GameEngine extends JPanel implements ActionListener {
         gho3.updateCharacter();
         gho4.updateCharacter();
         Item itemType = grid.update(pac);
-        if(itemType != null)
+        if (itemType != null)
             activateItem(itemType);
         frameCount++;
         state = (frameCount / animationRate) % 4;
-        for(int i = 0; i< itemStart.size(); i++) {
+        for (int i = 0; i < itemStart.size(); i++) {
             if (((frameCount - itemStart.get(i).value) * 10) >= activeItem.get(i).duration) {
                 deactivateItem(i);
                 i--;
@@ -409,14 +432,14 @@ public class GameEngine extends JPanel implements ActionListener {
      * Deactivates all active items
      */
     private void deactivateAllItems() {
-        while(activeItem.peekFirst()!=null)
-        {
+        while (activeItem.peekFirst() != null) {
             deactivateItem(0);
         }
     }
 
     /**
      * Invokes the activation method of an item and records the time the item was activated.
+     *
      * @param itemType Denotes the type of item that should be activated.
      */
     private void activateItem(Item itemType) {
@@ -449,23 +472,27 @@ public class GameEngine extends JPanel implements ActionListener {
         gho3.drawGhost(g2d);
         gho4.drawGhost(g2d);
         String l = "Lives: " + lives;
-        String l2 = "Time: " + (timeLimit[0] - (frameCount/100));
+        String l2 = "Time: " + (timeLimit[0] - (frameCount / 100));
         String s = "Score: " + grid.score;
         g.drawString(s, 20, 20);
         g.drawString(l, 360, 20);
         g.drawString(l2, 180, 20);
-        if (grid.winCondition()){
-            if(firstGameOver) {
+        if (grid.winCondition()) {
+            if (firstGameOver) {
                 grid.score += (timeLimit[0] - (frameCount / 100)) * 10;
-                firstGameOver=false;
-                System.out.print(grid.score);
+                firstGameOver = false;
+                // write score to server
+                if (out != null && username != null)
+                    out.println("updatescore " + username + " " + grid.score);
             }
             winScreen(g);
         }
-        if (pac.lossCondition() || (timeLimit[0] - (frameCount/100)) <=0) {
-            if(firstGameOver) {
-                System.out.print(grid.score);
+        if (pac.lossCondition() || (timeLimit[0] - (frameCount / 100)) <= 0) {
+            if (firstGameOver) {
                 firstGameOver = false;
+                // write score to server
+                if (out != null && username != null)
+                    out.println("updatescore " + username + " " + grid.score);
             }
             resetScreen(g);
         }

@@ -111,17 +111,29 @@ public class Pacman {
         int xx = x / 30, yy = y / 30;
         boolean leftedge = xx == 0;
         boolean rightedge = xx == 14;
-        switch (x) {
-            case -29:
+        if (step == 1) {
+            if (x <= -29) {
                 x = 449;
                 leftedge = false;
                 rightedge = true;
-                break;
-            case 449:
+            }
+            else if (x >= 449) {
                 x = -29;
                 leftedge = true;
                 rightedge = false;
-                break;
+            }
+        }
+        else {
+            if (x <= -28) {
+                x = 448;
+                leftedge = false;
+                rightedge = true;
+            }
+            else if (x >= 448) {
+                x = -28;
+                leftedge = true;
+                rightedge = false;
+            }
         }
 
         if (rightedge || array[(x + 30) / 30][yy] <= 1 && y % 30 == 0)
@@ -145,7 +157,12 @@ public class Pacman {
         switch (temp_direction) {
             case KeyEvent.VK_RIGHT:
                 if (checkArr[0] == 1) {
-                    x += step;
+                    if (step == 1)
+                        x += step;
+                    else if (step == 2 && ((x+1)% 30 == 0 || (x-1)% 30 == 0 || (y+1)% 30 == 0 || (y-1)% 30 == 0))
+                        x += (step-1);
+                    else
+                        x += step;
                     ctn_direction = KeyEvent.VK_RIGHT;
                     stuck = false;
                 } else {
@@ -154,7 +171,12 @@ public class Pacman {
                 break;
             case KeyEvent.VK_DOWN:
                 if (checkArr[1] == 1) {
-                    y += step;
+                    if (step == 1)
+                        y += step;
+                    else if (step == 2 && ((x+1)% 30 == 0 || (x-1)% 30 == 0 || (y+1)% 30 == 0 || (y-1)% 30 == 0))
+                        y += (step-1);
+                    else
+                        y += step;
                     ctn_direction = KeyEvent.VK_DOWN;
                     stuck = false;
                 } else {
@@ -165,7 +187,12 @@ public class Pacman {
                 break;
             case KeyEvent.VK_LEFT:
                 if (checkArr[2] == 1) {
-                    x -= step;
+                    if (step == 1)
+                        x -= step;
+                    else if (step == 2 && ((x+1)% 30 == 0 || (x-1)% 30 == 0 || (y+1)% 30 == 0 || (y-1)% 30 == 0))
+                        x -= (step-1);
+                    else
+                        x -= step;
                     ctn_direction = KeyEvent.VK_LEFT;
                     stuck = false;
                 } else {
@@ -174,7 +201,12 @@ public class Pacman {
                 break;
             case KeyEvent.VK_UP:
                 if (checkArr[3] == 1) {
-                    y -= step;
+                    if (step == 1)
+                        y -= step;
+                    else if (step == 2 && ((x+1)% 30 == 0 || (x-1)% 30 == 0 || (y+1)% 30 == 0 || (y-1)% 30 == 0))
+                        y -= (step-1);
+                    else
+                        y -= step;
                     ctn_direction = KeyEvent.VK_UP;
                     stuck = false;
                 } else {

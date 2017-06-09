@@ -25,7 +25,7 @@ public class GridReadCreate extends JPanel {
     /**
      * Name of the file where grid data is stored.
      */
-    final static String FILE_NAME = PATH + "TestData.txt";
+    static String FILE_NAME;
 
     /**
      * Array that contains the numbers for each portion of the 15x15 grid.
@@ -45,14 +45,16 @@ public class GridReadCreate extends JPanel {
     /**
      * Number of dots in the grid.
      */
-    int totalDots = 111;
+    int totalDots = 0; //111
 
 
     /**
      * Default constructor for GridReadCreate objects. Reads and translates a
      * file into the array. Also creates an instance of a SpeedUp item.
+     * @param level Chooses which level to load
      */
-    GridReadCreate() {
+    GridReadCreate(int level) {
+        FILE_NAME= PATH + "Level" + level + ".txt";
         try {
             translateTo2DArray(readFile(FILE_NAME));
         } catch (IOException e) {
@@ -93,8 +95,13 @@ public class GridReadCreate extends JPanel {
     void translateTo2DArray(List<String> list) {
         for (int i = 0; i < 15; i++) {
             String[] split = list.get(i).split(" ");
-            for (int j = 0; j < split.length; j++)
-                arr[i][j] = Integer.parseInt(split[j]);
+            for (int j = 0; j < split.length; j++) {
+                arr[i][j] = Integer.parseInt(split[j].trim());
+                if((arr[i][j]==1) || arr[i][j] < 0)
+                {
+                    totalDots += 1;
+                }
+            }
         }
     }
 

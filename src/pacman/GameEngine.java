@@ -88,11 +88,6 @@ public class GameEngine extends JPanel implements ActionListener {
     Color fontColor = new Color(255, 54, 42);
 
     /**
-     * An instance of GridReadCreate which represents the grid for the game.
-     */
-    GridReadCreate grid = new GridReadCreate();
-
-    /**
      * An instance of Pacman, containing the character variables and methods.
      */
     Pacman pac;
@@ -173,6 +168,31 @@ public class GameEngine extends JPanel implements ActionListener {
      */
     String username;
 
+    /**
+     * This boolean checks if the game should move on to the next level.
+     */
+    boolean nextLevel = true;
+
+    /**
+     * Level number
+     */
+    int level = 1;
+
+    /**
+     * An instance of GridReadCreate which represents the grid for the game.
+     */
+    GridReadCreate grid = new GridReadCreate(level);
+
+    /**
+     * Decides which level is the last level.
+     */
+    int lastLevel = 3;
+
+    /**
+     * Keeps track of the total score among all levels.
+     */
+    int totalScore =0;
+
     public GameEngine() {}
 
     public GameEngine(PrintWriter out, String username) {
@@ -232,11 +252,18 @@ public class GameEngine extends JPanel implements ActionListener {
                         pause = true;
                         break;
                     case KeyEvent.VK_R:
-                        if(pac.lossCondition() || (timeLimit[0]-(frameCount/100)) <=0)
+                        if(pac.lossCondition() || (timeLimit[0]-(frameCount/100)) <=0 || (grid.winCondition() && (level == lastLevel)))
                             reset = true;
                         break;
                     case KeyEvent.VK_SPACE:
-                        start = true;
+                        if(grid.winCondition() && (level < lastLevel))
+                        {
+                            nextLevel = true;
+                        }
+                        else
+                        {
+                            start = true;
+                        }
                         break;
                 }
             }
@@ -298,8 +325,9 @@ public class GameEngine extends JPanel implements ActionListener {
                 }
                 characterSetup();
                 reset = false;
-            } else if (reset && (pac.lossCondition() || (timeLimit[0] - (frameCount / 100)) <= 0)) {
+            } else if (reset && (pac.lossCondition() || (timeLimit[0] - (frameCount / 100)) <= 0 || (grid.winCondition() && level == lastLevel))) {
                 lives = 3;
+                level = 1;
                 timeLimit[0] = constTimeLimit;
                 firstGameOver = true;
                 frameCount = 0;
@@ -307,8 +335,22 @@ public class GameEngine extends JPanel implements ActionListener {
                 ghostsY = new int[]{30, 210, 390, 240};
                 if (activeItem.peekFirst() != null)
                     deactivateAllItems();
+                grid = new GridReadCreate(level);
                 characterSetup();
-                grid = new GridReadCreate();
+                grid.score = 0;
+                totalScore = 0;
+            }
+            if(grid.winCondition() && nextLevel && (level < lastLevel))
+            {
+                level += 1;
+                lives = 3;
+                timeLimit[0] = constTimeLimit;
+                firstGameOver = true;
+                frameCount = 0;
+                if (activeItem.peekFirst() != null)
+                    deactivateAllItems();
+                grid = new GridReadCreate(level);
+                characterSetup();
                 grid.score = 0;
             }
             revalidate();
@@ -331,12 +373,20 @@ public class GameEngine extends JPanel implements ActionListener {
         g.fillRect(50, 450 / 2 - 30, 450 - 100, 50);
         g.setColor(new Color(220, 200, 25));
         //grid.score += (timeLimit - (frameCount/100)) * 10;
-        String s = "Score: " + grid.score;
+        String s = "Score: " + (grid.score + totalScore);
         g.drawString(s, 20, 20);
-        g.drawString("YOU WON!", 190, 220);
+        if(level < lastLevel) {
+            g.drawString("YOU WON!", 180, 213);
+            g.drawString("PRESS SPACE TO MOVE ON TO THE NEXT LEVEL", 68, 236);
+        }
+        else
+        {
+            g.drawString("YOU WON!", 190, 210);
+            g.drawString("PRESS R TO RESTART AT LEVEL 1", 130, 240);
+        }
     }
 
-    /**
+    /**pr
      * Displays the losing screen.
      *
      * @param g Graphics object that contains a method for drawing strings.
@@ -394,7 +444,7 @@ public class GameEngine extends JPanel implements ActionListener {
         g.fillRect(50, 450 / 2 - 30, 450 - 100, 50 + 30);
         g.setColor(new Color(220, 200, 25));
         g.drawString("YOU LOST!", 190, 220);
-        g.drawString("PRESS R TO RESTART GAME", 130, 250);
+        g.drawString("PRESS R TO RESTART AT LEVEL 1", 130, 250);
     }
 
     /**
@@ -474,26 +524,36 @@ public class GameEngine extends JPanel implements ActionListener {
         gho4.drawGhost(g2d);
         String l = "Lives: " + lives;
         String l2 = "Time: " + (timeLimit[0] - (frameCount / 100));
-        String s = "Score: " + grid.score;
+        String s = "Score: " + (grid.score + totalScore);
+        String lev = "Level: " + level;
         g.drawString(s, 20, 20);
+        g.drawString(lev, 190, 440);
         g.drawString(l, 360, 20);
         g.drawString(l2, 180, 20);
         if (grid.winCondition()) {
-            if (firstGameOver) {
+            if (firstGameOver && (level == lastLevel)) {
                 grid.score += (timeLimit[0] - (frameCount / 100)) * 10;
                 firstGameOver = false;
                 // write score to server
                 if (out != null && username != null)
-                    out.println("updatescore " + username + " " + grid.score);
+                    out.println("updatescore " + username + " " + totalScore);
+            }
+            else
+            {
+                if(firstGameOver) {
+                    grid.score += (timeLimit[0] - (frameCount / 100)) * 10;
+                    totalScore += grid.score;
+                }
             }
             winScreen(g);
         }
         if (pac.lossCondition() || (timeLimit[0] - (frameCount / 100)) <= 0) {
             if (firstGameOver) {
+                totalScore += grid.score;
                 firstGameOver = false;
                 // write score to server
                 if (out != null && username != null)
-                    out.println("updatescore " + username + " " + grid.score);
+                    out.println("updatescore " + username + " " + totalScore);
             }
             resetScreen(g);
         }

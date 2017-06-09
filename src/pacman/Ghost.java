@@ -7,18 +7,53 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * The class of ghost, which creates the object of ghost, updates the object of ghost and draws the object of ghost
+ */
 public class Ghost {
 
+    /**
+     * Direction of ghost object
+     */
     int direction = 3;
+
+    /**
+     * X coordinate of the ghost
+     */
     int x = 60;
+
+    /**
+     * Y coordinate of the ghost
+     */
     int y = 30;
-    int dx, dy;
+
+    /**
+     * Step of the ghost movement
+     */
     int step = 1;
-    int width = 800;
+
+    /**
+     * Height limitation of movement
+     */
     int height = 400;
+
+    /**
+     * Array that stores the map data
+     */
     int[][] array = {};
+
+    /**
+     * Ghost image
+     */
     BufferedImage ghostImage;
 
+    /**
+     * Constructor of Ghost class, initiate ghost object
+     * @param grc GridReadCreate object
+     * @param x_cor initial x coordinate of the ghost
+     * @param y_cor initial y coordinate of the ghost
+     * @param image image of the ghost object
+     */
     public Ghost(GridReadCreate grc, int x_cor, int y_cor, BufferedImage image) {
         ghostImage = image;
         int xsize = grc.arr.length;
@@ -32,19 +67,19 @@ public class Ghost {
                 array[j][i] = grc.arr[i][j];
     }
 
-    void prt(String s) {
-        System.out.print(s);
-    }
-
+    /**
+     * Gets random direction for the ghost.
+     * @return Number that corresponds the direction
+     */
     private int getDirection() {
         Random rand = new Random();
         int n = rand.nextInt(4); //int m = rand.nextInt(2) + 1;
         return n;
     }
 
-    // updateCharacter needs to be change, currently it moves step by step
-    // which means can change direction one step and another step
-    // needs to proceed until a wall, then call update character()
+    /**
+     * Updates the position of the ghost based on viable paths
+     */
     public void updateCharacter() {
         int[] checkArr = {0, 0, 0, 0}; // should add range checker here
         int xx = x / 30, yy = y / 30;
@@ -125,6 +160,10 @@ public class Ghost {
         }
     }
 
+    /**
+     *  Draws the ghost onto the graphic board.
+     * @param g Graphics2D object g
+     */
     public void drawGhost(Graphics2D g) {
         g.drawImage(ghostImage, x, y, null);
     }

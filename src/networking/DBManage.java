@@ -6,9 +6,9 @@ import java.sql.*;
  * {@link DBManage} is the universal database management class. It is used for
  * any purpose regarding to the central database. Currently it supports the
  * following usages:
- * <p><ul>
+ * <ul>
  * <li>login validation given username and password: {@link #userIdentityValidation(String, String)}</li>
- * </ul></p>
+ * </ul>
  */
 public class DBManage {
 

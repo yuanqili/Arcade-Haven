@@ -1,6 +1,5 @@
 package networking;
 
-import javax.management.Query;
 import java.sql.*;
 
 /**

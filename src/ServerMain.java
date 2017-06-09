@@ -8,8 +8,6 @@ public class ServerMain {
         try {
             port = Integer.parseInt(args[0]);
         } catch (Exception e) {
-//            System.out.println("usage: ServerMain <port>");
-//            return;
         }
 
         SBServer2 server = new SBServer2(port);

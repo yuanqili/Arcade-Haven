@@ -1,6 +1,20 @@
 <project default="compile">
-  <target name="compile">
-    <mkdir dir="out"/>
-    <javac srcdir="src" destdir="out"/>
-  </target>
+
+    <target name="compile">
+        <mkdir dir="out"/>
+        <javac srcdir="src" destdir="out"/>
+    </target>
+
+    <target name="game">
+        <java jar="out/Arcade-Haven.jar" fork="true"/>
+    </target>
+
+    <target name="server">
+        <exec dir="out" executable="java">
+            <arg value="-cp"/>
+            <arg value="../lib/mysql-connector-java-5.1.41-bin.jar:."/>
+            <arg value="ServerMain"/>
+        </exec>
+    </target>
+
 </project>

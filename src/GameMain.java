@@ -10,8 +10,6 @@ public class GameMain {
             host = args[0];
             port = Integer.parseInt(args[1]);
         } catch (Exception e) {
-//            System.out.println("usage: GameMain <host> <port>");
-//            return;
         }
 
         new Login(host, port);

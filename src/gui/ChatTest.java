@@ -5,9 +5,7 @@ import java.awt.*;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 public class ChatTest implements Runnable {
 
@@ -124,8 +122,12 @@ public class ChatTest implements Runnable {
                 case "score":
                     scores.removeAllElements();
                     String[] userscore = tokens[1].split(" ");
-                    for (int i = 0; i < userscore.length - 1; i += 2)
-                        scores.addElement(userscore[i] + " " + userscore[i+1]);
+                    HashMap<String, Integer> map = new HashMap<>();
+                    for (int i = 0; i < userscore.length - 1; i+= 2)
+                        map.put(userscore[i], Integer.parseInt(userscore[i+1]));
+                    map.entrySet().stream()
+                            .sorted(Collections.reverseOrder(HashMap.Entry.comparingByValue()))
+                            .forEach(kv -> scores.addElement(kv.getKey() + "\t" + kv.getValue()));
                     break;
             }
         });
